@@ -2,12 +2,15 @@ const config = require("./../config.json");
 const botData = require("./../botData.json");
 const express = require('express');
 const session = require('express-session');
-const bot = require("./../discord-bot-sourcefiles/main");
+const bot = require("./../main.js");
 const log = require("./../log.json");
 const fs = require("fs");
 const bodyParser = require('body-parser');
 const now = require("performance-now");
 const commands = require("./../discord-bot-sourcefiles/bot-commands.json");
+
+var passport = require('passport');
+var Strategy = require('../lib').Strategy;
 
 const chalk = require('chalk');
 const ctx = new chalk.constructor({level: 3});
@@ -30,6 +33,27 @@ var exports = module.exports = {};
  */
 exports.startApp = function (/**Object*/ client) {
 
+
+    passport.serializeUser(function(user, done) {
+        done(null, user);
+      });
+      passport.deserializeUser(function(obj, done) {
+        done(null, obj);
+      });
+      
+      var scopes = ['identify', 'guilds'];
+      
+      passport.use(new Strategy({
+          clientID: config.clientID,
+          clientSecret: config.clientsecret,
+          callbackURL: 'http://localhost:3000/callback',
+          scope: scopes
+      }, function(accessToken, refreshToken, profile, done) {
+          process.nextTick(function() {
+              return done(null, profile);
+          });
+      }));
+
     let maintenanceStatus = botData.maintenance;
 
     app.set('view engine', 'ejs');
@@ -39,7 +63,13 @@ exports.startApp = function (/**Object*/ client) {
     app.use('/scripts', express.static('src', { redirect : false }));
     app.use('/src', express.static('src', { redirect : false }));
 
-    app.use(session({secret: 'ssshhhhh'}));
+    app.use(session({secret: 'ssshhhhh',
+    resave: true,
+    saveUninitialized: true,}));
+
+    app.use(passport.initialize());
+app.use(passport.session());
+app.get('/login', passport.authenticate('discord', { scope: scopes }), function(req, res) {});
 
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({
@@ -47,6 +77,23 @@ exports.startApp = function (/**Object*/ client) {
     }));
 
     // ---- GET
+
+    app.get('/callback',
+    passport.authenticate('discord', { failureRedirect: '/' }), function(req, res) { res.redirect('/info') } // auth success
+);
+app.get('/logout', function(req, res) {
+    req.logout();
+    res.redirect('/');
+});
+app.get('/info', checkAuth, function(req, res) {
+    //console.log(req.user)
+    res.json(req.user);
+});
+
+function checkAuth(req, res, next) {
+    if (req.isAuthenticated()) return next();
+    res.send('not logged in :(');
+}
 
     app.get("/", (req, res) => {
         res.render("index", {data: client, maintenanceStatus: maintenanceStatus, botData: botData});
@@ -91,7 +138,7 @@ exports.startApp = function (/**Object*/ client) {
             log: log,
             commands: commands,
             botData: botData,
-            prefix: config.prefix
+            prefix: config.settings.prefix
         })
     });
 
@@ -138,7 +185,19 @@ exports.startApp = function (/**Object*/ client) {
         bot.setGameStatus(req.body.gameStatus, false, now());
 
         // TODO: Updating the config.json with the new bot_game value to get the new game value when restarting the bot.
+        bot.setBotStatus(req.body.gameStatus, false);
+        var fs = require('fs')
+        fs.readFile('.\..\config.json', 'utf8', function (err,data) {
+            if (err) {
+                return console.log(err);
+            }
+            var result = data.replace(bot_game, req.body.gameStatus);
 
+            fs.writeFile('.\..\config.json', result, 'utf8', function (err) {
+                if (err) return console.log(err);
+            });
+        });
+       
         res.redirect("/");
         console.log("\n>> Redirecting to /");
     });
@@ -146,6 +205,18 @@ exports.startApp = function (/**Object*/ client) {
     app.post("/change-status", (req, res) => {
 
         bot.setBotStatus(req.body.status, false);
+        var fs = require('fs')
+        fs.readFile('.\..\config.json', 'utf8', function (err,data) {
+            if (err) {
+                return console.log(err);
+            }
+            var result = data.replace(bot_status, req.body.status);
+
+            fs.writeFile('.\..\config.json', result, 'utf8', function (err) {
+                if (err) return console.log(err);
+            });
+        });
+
 
         res.redirect("/");
         console.log("\n>> Redirecting to /");
@@ -172,8 +243,8 @@ exports.startApp = function (/**Object*/ client) {
     // You can look inside the repository of chalk to understand how it works and how to use it.
     // Repository: https://goo.gl/qfQ4Pv
 
-    app.listen(config.LISTENING_PORT, function () {
-        console.log(chalk.cyanBright('>> Dashboard is online and running on port ' + config.LISTENING_PORT + '!\n'));
+    app.listen(config.port, function () {
+        console.log(chalk.cyanBright('>> Dashboard is online and running on port ' + config.port + '!\n'));
     });
 
 };
