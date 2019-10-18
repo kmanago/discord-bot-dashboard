@@ -1,5 +1,38 @@
-{
-  "LISTENING_PORT": 3000,
-  "prefix": "!",
-  "token": "BOT_TOKEN"
+{"settings": {
+      "prefix": "!",
+      "modLogChannel": "mod-log",
+      "modRole": "Moderator",
+      "adminRole": "Administrator",
+      "welcomeChannel": "arrivals",
+      "welcome": "Welcome {member} to {server}! Remember to look over the rules & and introduce yourself in the proper channel. Once you've done so, you'll be allowed access to meet everyone else.",
+      "goodbyeChannel": "depatures",
+      "goodbye": "Goodbye {member}! We understand you have to continue that journey to bigger and better regions!"
+  },
+  "port": 3000,
+  "token": "your token here",
+  "clientID": "your client id",
+  "clientsecret": "your secret,
+  "paths": {
+      "commands": "./commands",
+      "events": "./events"
+  },
+  "emojis" : {
+      "no": "<:no:627948489695035462>",
+      "yes" : "<:yes:627948508086796308>",
+      "lvlup": "<:mariolevelup:628002543884042281>"
+  },
+  "apikeys": {
+      "dog": "your api key",
+      "cat": "your api key"
+  },
+  "colors": {
+      "red": "#e3847f",
+      "blue": "#7fa5e3",
+      "green": "#7fe381",
+      "purple": "#c57fe3",
+      "orange": "#e3ac7f",
+      "pink": "#e37fb4",
+      "yellow": "#e3d77f"
+  }
 }
+  
