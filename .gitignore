@@ -1,3 +1,7 @@
 private_config.json
 node_modules
 .idea
+data/enmap.sqlite
+data/enmap.sqlite-shm
+data/enmap.sqlite-wal
+config.json
