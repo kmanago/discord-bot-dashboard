@@ -64,8 +64,8 @@ exports.startApp = function (/**Object*/ client) {
     app.use('/src', express.static('src', { redirect : false }));
 
     app.use(session({secret: 'ssshhhhh',
-    resave: true,
-    saveUninitialized: true,}));
+    resave: false,
+    saveUninitialized: false,}));
 
     app.use(passport.initialize());
 app.use(passport.session());
@@ -79,15 +79,20 @@ app.get('/login', passport.authenticate('discord', { scope: scopes }), function(
     // ---- GET
 
     app.get('/callback',
-    passport.authenticate('discord', { failureRedirect: '/' }), function(req, res) { res.redirect('/info') } // auth success
+    passport.authenticate('discord', { failureRedirect: '/' }), function(req, res) { res.redirect('/') } // auth success
 );
 app.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
 });
-app.get('/info', checkAuth, function(req, res) {
+
+app.get('/home', checkAuth, function(req, res) {
     //console.log(req.user)
-    res.json(req.user);
+    var member = req.user;
+    //res.send(member);
+    //res.json(req.user);
+    res.render('/manage', {member: req.user });
+    console.log(member.username)
 });
 
 function checkAuth(req, res, next) {
@@ -96,19 +101,19 @@ function checkAuth(req, res, next) {
 }
 
     app.get("/", (req, res) => {
-        res.render("index", {data: client, maintenanceStatus: maintenanceStatus, botData: botData});
+        res.render("index", {data: client, maintenanceStatus: maintenanceStatus, botData: botData, member: req.user});
     });
 
     app.get("/home", (req, res) => {
-        res.render("index", {data: client, maintenanceStatus: maintenanceStatus, botData: botData});
+        res.render("index", {data: client, maintenanceStatus: maintenanceStatus, botData: botData, member: req.user});
     });
 
     app.get("/dashboard", (req, res) => {
-        res.render("index", {data: client, maintenanceStatus: maintenanceStatus, botData: botData});
+        res.render("index", {data: client, maintenanceStatus: maintenanceStatus, botData: botData, member: req.user});
     });
 
     app.get("/messages", (req, res) => {
-        res.render("messages", {data: client, maintenanceStatus: maintenanceStatus});
+        res.render("messages", {data: client, maintenanceStatus: maintenanceStatus, member: req.users});
     });
 
     app.get("/outputClient", (req, res) => {
@@ -127,7 +132,8 @@ function checkAuth(req, res, next) {
         res.render("log", {
             data: client,
             maintenanceStatus: maintenanceStatus,
-            log: log
+            log: log,
+            member: req.user
         })
     });
 
@@ -138,16 +144,17 @@ function checkAuth(req, res, next) {
             log: log,
             commands: commands,
             botData: botData,
-            prefix: config.settings.prefix
+            prefix: config.settings.prefix,
+            member: req.user
         })
     });
 
     app.get("/botStatus", (req, res) => {
-        res.render("botStatus", {data: client, maintenanceStatus: maintenanceStatus});
+        res.render("botStatus", {data: client, maintenanceStatus: maintenanceStatus, member: req.user});
     });
 
     app.get("/status", (req, res) => {
-        res.render("botStatusPage", {data: client, botData: botData});
+        res.render("botStatusPage", {data: client, botData: botData, member: req.user});
     });
 
     app.get("/activateMaintenance", (req, res) => {
