@@ -113,7 +113,7 @@ function checkAuth(req, res, next) {
     });
 
     app.get("/messages", (req, res) => {
-        res.render("messages", {data: client, maintenanceStatus: maintenanceStatus, member: req.users});
+        res.render("messages", {data: client, maintenanceStatus: maintenanceStatus, member: req.user});
     });
 
     app.get("/outputClient", (req, res) => {
