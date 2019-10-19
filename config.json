@@ -11,7 +11,7 @@
   "port": 3000,
   "token": "your token here",
   "clientID": "your client id",
-  "clientsecret": "your secret,
+  "clientsecret": "your secret",
   "paths": {
       "commands": "./commands",
       "events": "./events"
