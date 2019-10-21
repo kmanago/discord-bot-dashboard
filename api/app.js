@@ -33,13 +33,16 @@ var exports = module.exports = {};
  */
 exports.startApp = function (/**Object*/ client) {
 
+    let port = config.port;
 
+    
     passport.serializeUser(function(user, done) {
         done(null, user);
       });
       passport.deserializeUser(function(obj, done) {
         done(null, obj);
       });
+      
       
       var scopes = ['identify', 'guilds'];
       
@@ -54,37 +57,51 @@ exports.startApp = function (/**Object*/ client) {
           });
       }));
 
-    let maintenanceStatus = botData.maintenance;
 
+    let maintenanceStatus = botData.maintenance;
     app.set('view engine', 'ejs');
+    app.set('port', port);
+
 
     app.use('/lib', express.static('lib', { redirect : false }));
     app.use('/styles', express.static('src', { redirect : false }));
     app.use('/scripts', express.static('src', { redirect : false }));
     app.use('/src', express.static('src', { redirect : false }));
 
+    app.set('client', client);
+    app.set('botData', botData);
+    app.set('bot', bot);
+    app.set('maintenanceStatus', maintenanceStatus);
+    app.set('log', log);
+
+    
     app.use(session({secret: 'ssshhhhh',
     resave: false,
     saveUninitialized: false,}));
 
-    app.use(passport.initialize());
-app.use(passport.session());
-app.get('/login', passport.authenticate('discord', { scope: scopes }), function(req, res) {});
+    require ('./router')(app);
 
+    
+    app.use(passport.initialize());
+    app.use(passport.session());
+    app.get('/login', passport.authenticate('discord', { scope: scopes }), function(req, res) {});
+      
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({
         extended: true
     }));
 
-    // ---- GET
-
+    // ---- GET  
     app.get('/callback',
-    passport.authenticate('discord', { failureRedirect: '/' }), function(req, res) { res.redirect('/') } // auth success
+    passport.authenticate('discord', { failureRedirect: '/' }), function(req, res) { res.redirect('/profile'); app.set('member', req.user) } // auth success
+    
 );
+
 app.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
 });
+
 
 app.get('/home', checkAuth, function(req, res) {
     //console.log(req.user)
@@ -99,7 +116,7 @@ function checkAuth(req, res, next) {
     if (req.isAuthenticated()) return next();
     res.send('not logged in :(');
 }
-
+/*
     app.get("/", (req, res) => {
         res.render("index", {data: client, maintenanceStatus: maintenanceStatus, botData: botData, member: req.user});
     });
@@ -112,30 +129,31 @@ function checkAuth(req, res, next) {
         res.render("index", {data: client, maintenanceStatus: maintenanceStatus, botData: botData, member: req.user});
     });
 
-    app.get("/messages", (req, res) => {
+   app.get("/messages", (req, res) => {
         res.render("messages", {data: client, maintenanceStatus: maintenanceStatus, member: req.user});
-    });
+    });*/
 
-    app.get("/outputClient", (req, res) => {
+    /*app.get("/outputClient", (req, res) => {
         let t0 = now();
         console.log(bot.sendClientObject(t0));
         res.redirect("/dashboard");
     });
+  
 
     app.get("/outputGuilds", (req, res) => {
         let t0 = now();
         console.log(bot.sendGuildsObject(t0));
         res.redirect("/dashboard");
     });
-
-    app.get("/log", (req, res) => {
+    */
+    /*app.get("/log", (req, res) => {
         res.render("log", {
             data: client,
             maintenanceStatus: maintenanceStatus,
             log: log,
             member: req.user
         })
-    });
+    });*/
 
     app.get("/manage", (req, res) => {
         res.render("manage", {
