@@ -9,9 +9,9 @@
       "goodbye": "Goodbye {member}! We understand you have to continue that journey to bigger and better regions!"
   },
   "port": 3000,
-  "token": "NjI1NzQzODYzNDI4MDIyMjcy.XapwUg.bxBRAEsZM-PMgtDFao6h5bowgaQ",
-  "clientID": "625743863428022272",
-  "clientsecret": "OQ6LfR7dZQgVrG6rPvyxzhKkwN3zm53e",
+  "token": "your token here",
+  "clientID": "your client id",
+  "clientsecret": "your secret",
   "paths": {
       "commands": "./commands",
       "events": "./events"
