@@ -6,6 +6,8 @@ router.get("/", (req, res, next) => {
     var maintenanceStatus = req.app.get('maintenanceStatus');
     var botData = req.app.get('botData');
     var member = req.app.get('member');
-    res.render("index", {data: client, maintenanceStatus: maintenanceStatus, botData: botData, member: member});
+
+
+    res.render("dashboard", {data: client, maintenanceStatus: maintenanceStatus, botData: botData, member: member});
 });
 module.exports = router;

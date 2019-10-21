@@ -51,15 +51,22 @@ const app = require("./api/app");
 const commandPrefix = config.settings.prefix;
 const cooldowns = new Discord.Collection();
 
+
 // Executed when the bot is ready!
-client.on('ready', () => {
+ client.on('ready', async () => {
     // Console output for showing that the bot is running.
     console.log(chalk.greenBright('\n>> Bot is ready!'));
     console.log('>> Logged in as ' + client.user.username);
-    client.user.setPresence({ game: { name: botconfig.bot_game }, status: botconfig.bot_status})
+    //client.user.setPresence({ game: { name: botconfig.bot_game }} status: botconfig.bot_status})
+    client.user.setActivity(botconfig.bot_game);
+    client.user.setStatus(botconfig.bot_status)
     console.log(`Connected as ${client.user.tag}`)
-    
-
+    client.appInfo = await client.fetchApplication().then(application =>
+        {
+            return application;
+        }
+    )
+    //console.log(client.appInfo)
     // This is starting the app.
     app.startApp(client);
 });
@@ -399,24 +406,25 @@ exports.setBotStatus = function (/**String*/ status,/**boolean*/maintenanceChang
             "\n>> PresenceStatus: https://discord.js.org/#/docs/main/stable/typedef/PresenceStatus" +
             "\n>> Sent value: " + status);
     }else{
-        // Setting the new value
-        client.user.setStatus(status);
-        // Output successful notification
-        console.log(">> Bot Change > Status set to: " + status);
+        
 
         if(maintenanceChange === false) {
 
             // Change value in botData.json
-            fs.readFile("./botData.json", "utf-8", function (err, data) {
+            fs.readFile('./botData.json', "utf-8", function (err, data) {
                 if (err) throw err;
                 let botData = JSON.parse(data);
-
+                console.log(botData)
                 // Setting new status value
                 botData.bot_status = status;
-
+                console.log(botData)
                 // Writing new value into the json file
                 fs.writeFile('./botData.json', JSON.stringify(botData, null, 3), 'utf-8', function (err) {
                     if (err) throw err;
+                    // Setting the new value
+                    client.user.setStatus(status);
+                    // Output successful notification
+                    console.log(">> Bot Change > Status set to: " + status);
                     console.log(chalk.greenBright(">> Successfully edited botData.json. Followed values were changed in botData.json:"));
                     console.log(chalk.yellowBright(">> status: ") + chalk.redBright(statusBeforeChanging) + " -> " + chalk.greenBright.bold(status));
                 })

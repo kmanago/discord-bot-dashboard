@@ -6,7 +6,7 @@ router.get("/", (req, res, next) => {
     var bot= req.app.get('bot');
     let t0 = now();
     console.log(bot.sendClientObject(t0));
-    res.redirect("/");
+    res.redirect("/manage");
 
 });
 module.exports = router;

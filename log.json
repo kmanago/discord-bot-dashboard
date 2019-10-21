@@ -724,5 +724,509 @@
       "log_message": "Maintenance was disabled!",
       "log_date": 1571531738571,
       "log_action": "Disabling maintenance took 2.740ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Server admins got an message which contains information that maintenance was enabled!",
+      "log_date": 1571666215750,
+      "log_action": ""
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values of bot client changed!",
+      "log_date": 1571666215811,
+      "log_action": "Changed values: client.user.localPresence.status , client.user.localPresence.game.name"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values in botData.json changed!",
+      "log_date": 1571666215842,
+      "log_action": "Changed property values: maintenance, status, bot_game"
+   },
+   {
+      "log_type": "maintenance",
+      "log_message": "Maintenance was enabled!",
+      "log_date": 1571666215851,
+      "log_action": "Enabling maintenance took 4.898ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values of bot client changed!",
+      "log_date": 1571666647716,
+      "log_action": "Changed values: client.user.localPresence.status , client.user.localPresence.game.name"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values in botData.json changed!",
+      "log_date": 1571666647757,
+      "log_action": "Changed property values: maintenance, status, bot_game"
+   },
+   {
+      "log_type": "maintenance",
+      "log_message": "Maintenance was disabled!",
+      "log_date": 1571666647770,
+      "log_action": "Disabling maintenance took 16.050ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values of bot client changed!",
+      "log_date": 1571666651122,
+      "log_action": "Changed values: client.user.localPresence.status , client.user.localPresence.game.name"
+   },
+   {
+      "log_type": "maintenance",
+      "log_message": "Maintenance was disabled!",
+      "log_date": 1571666651165,
+      "log_action": "Disabling maintenance took 15.747ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values in botData.json changed!",
+      "log_date": 1571666651180,
+      "log_action": "Changed property values: maintenance, status, bot_game"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Server admins got an message which contains information that maintenance was enabled!",
+      "log_date": 1571677791555,
+      "log_action": ""
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values of bot client changed!",
+      "log_date": 1571677791616,
+      "log_action": "Changed values: client.user.localPresence.status , client.user.localPresence.game.name"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values in botData.json changed!",
+      "log_date": 1571677791643,
+      "log_action": "Changed property values: maintenance, status, bot_game"
+   },
+   {
+      "log_type": "maintenance",
+      "log_message": "Maintenance was enabled!",
+      "log_date": 1571677791656,
+      "log_action": "Enabling maintenance took 7.113ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Server admins got an message which contains information that maintenance was enabled!",
+      "log_date": 1571677836121,
+      "log_action": ""
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values of bot client changed!",
+      "log_date": 1571677836182,
+      "log_action": "Changed values: client.user.localPresence.status , client.user.localPresence.game.name"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values in botData.json changed!",
+      "log_date": 1571677836218,
+      "log_action": "Changed property values: maintenance, status, bot_game"
+   },
+   {
+      "log_type": "maintenance",
+      "log_message": "Maintenance was enabled!",
+      "log_date": 1571677836223,
+      "log_action": "Enabling maintenance took 6.547ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values of bot client changed!",
+      "log_date": 1571677838696,
+      "log_action": "Changed values: client.user.localPresence.status , client.user.localPresence.game.name"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values in botData.json changed!",
+      "log_date": 1571677838736,
+      "log_action": "Changed property values: maintenance, status, bot_game"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values of bot client changed!",
+      "log_date": 1571677843657,
+      "log_action": "Changed values: client.user.localPresence.status , client.user.localPresence.game.name"
+   },
+   {
+      "log_type": "maintenance",
+      "log_message": "Maintenance was disabled!",
+      "log_date": 1571677843701,
+      "log_action": "Disabling maintenance took 8.021ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values in botData.json changed!",
+      "log_date": 1571677843705,
+      "log_action": "Changed property values: maintenance, status, bot_game"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Server admins got an message which contains information that maintenance was enabled!",
+      "log_date": 1571678633602,
+      "log_action": ""
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values of bot client changed!",
+      "log_date": 1571678633664,
+      "log_action": "Changed values: client.user.localPresence.status , client.user.localPresence.game.name"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values in botData.json changed!",
+      "log_date": 1571678633696,
+      "log_action": "Changed property values: maintenance, status, bot_game"
+   },
+   {
+      "log_type": "maintenance",
+      "log_message": "Maintenance was enabled!",
+      "log_date": 1571678633704,
+      "log_action": "Enabling maintenance took 9.085ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values of bot client changed!",
+      "log_date": 1571678651149,
+      "log_action": "Changed values: client.user.localPresence.status , client.user.localPresence.game.name"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values in botData.json changed!",
+      "log_date": 1571678651175,
+      "log_action": "Changed property values: maintenance, status, bot_game"
+   },
+   {
+      "log_type": "maintenance",
+      "log_message": "Maintenance was disabled!",
+      "log_date": 1571678651189,
+      "log_action": "Disabling maintenance took 8.319ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Server admins got an message which contains information that maintenance was enabled!",
+      "log_date": 1571681438519,
+      "log_action": ""
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values of bot client changed!",
+      "log_date": 1571681438580,
+      "log_action": "Changed values: client.user.localPresence.status , client.user.localPresence.game.name"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values in botData.json changed!",
+      "log_date": 1571681438612,
+      "log_action": "Changed property values: maintenance, status, bot_game"
+   },
+   {
+      "log_type": "maintenance",
+      "log_message": "Maintenance was enabled!",
+      "log_date": 1571681438621,
+      "log_action": "Enabling maintenance took 11.481ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values of bot client changed!",
+      "log_date": 1571681455073,
+      "log_action": "Changed values: client.user.localPresence.status , client.user.localPresence.game.name"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values in botData.json changed!",
+      "log_date": 1571681455106,
+      "log_action": "Changed property values: maintenance, status, bot_game"
+   },
+   {
+      "log_type": "maintenance",
+      "log_message": "Maintenance was disabled!",
+      "log_date": 1571681455116,
+      "log_action": "Disabling maintenance took 4.908ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Server admins got an message which contains information that maintenance was enabled!",
+      "log_date": 1571681513888,
+      "log_action": ""
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values of bot client changed!",
+      "log_date": 1571681513950,
+      "log_action": "Changed values: client.user.localPresence.status , client.user.localPresence.game.name"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values in botData.json changed!",
+      "log_date": 1571681513979,
+      "log_action": "Changed property values: maintenance, status, bot_game"
+   },
+   {
+      "log_type": "maintenance",
+      "log_message": "Maintenance was enabled!",
+      "log_date": 1571681513988,
+      "log_action": "Enabling maintenance took 7.634ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values of bot client changed!",
+      "log_date": 1571681527309,
+      "log_action": "Changed values: client.user.localPresence.status , client.user.localPresence.game.name"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values in botData.json changed!",
+      "log_date": 1571681527340,
+      "log_action": "Changed property values: maintenance, status, bot_game"
+   },
+   {
+      "log_type": "maintenance",
+      "log_message": "Maintenance was disabled!",
+      "log_date": 1571681527352,
+      "log_action": "Disabling maintenance took 5.455ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Output the client object",
+      "log_date": 1571687102286,
+      "log_action": "function call took 0.340ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Output the client object",
+      "log_date": 1571687153680,
+      "log_action": "function call took 0.168ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Output the guilds (client.guilds) object",
+      "log_date": 1571687864851,
+      "log_action": "function call took 0.251ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Output the client object",
+      "log_date": 1571687949237,
+      "log_action": "function call took 0.250ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Server admins got an message which contains information that maintenance was enabled!",
+      "log_date": 1571689048628,
+      "log_action": ""
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values of bot client changed!",
+      "log_date": 1571689048690,
+      "log_action": "Changed values: client.user.localPresence.status , client.user.localPresence.game.name"
+   },
+   {
+      "log_type": "maintenance",
+      "log_message": "Maintenance was enabled!",
+      "log_date": 1571689048729,
+      "log_action": "Enabling maintenance took 5.313ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values in botData.json changed!",
+      "log_date": 1571689048738,
+      "log_action": "Changed property values: maintenance, status, bot_game"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Server admins got an message which contains information that maintenance was enabled!",
+      "log_date": 1571689054919,
+      "log_action": ""
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values of bot client changed!",
+      "log_date": 1571689054979,
+      "log_action": "Changed values: client.user.localPresence.status , client.user.localPresence.game.name"
+   },
+   {
+      "log_type": "maintenance",
+      "log_message": "Maintenance was enabled!",
+      "log_date": 1571689055020,
+      "log_action": "Enabling maintenance took 5.987ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values in botData.json changed!",
+      "log_date": 1571689055022,
+      "log_action": "Changed property values: maintenance, status, bot_game"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values of bot client changed!",
+      "log_date": 1571689056834,
+      "log_action": "Changed values: client.user.localPresence.status , client.user.localPresence.game.name"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values in botData.json changed!",
+      "log_date": 1571689056863,
+      "log_action": "Changed property values: maintenance, status, bot_game"
+   },
+   {
+      "log_type": "maintenance",
+      "log_message": "Maintenance was disabled!",
+      "log_date": 1571689056875,
+      "log_action": "Disabling maintenance took 9.284ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Server admins got an message which contains information that maintenance was enabled!",
+      "log_date": 1571689443745,
+      "log_action": ""
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values of bot client changed!",
+      "log_date": 1571689443806,
+      "log_action": "Changed values: client.user.localPresence.status , client.user.localPresence.game.name"
+   },
+   {
+      "log_type": "maintenance",
+      "log_message": "Maintenance was enabled!",
+      "log_date": 1571689443846,
+      "log_action": "Enabling maintenance took 5.766ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values in botData.json changed!",
+      "log_date": 1571689443855,
+      "log_action": "Changed property values: maintenance, status, bot_game"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values of bot client changed!",
+      "log_date": 1571689456666,
+      "log_action": "Changed values: client.user.localPresence.status , client.user.localPresence.game.name"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values in botData.json changed!",
+      "log_date": 1571689456693,
+      "log_action": "Changed property values: maintenance, status, bot_game"
+   },
+   {
+      "log_type": "maintenance",
+      "log_message": "Maintenance was disabled!",
+      "log_date": 1571689456705,
+      "log_action": "Disabling maintenance took 6.203ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Server admins got an message which contains information that maintenance was enabled!",
+      "log_date": 1571689465471,
+      "log_action": ""
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values of bot client changed!",
+      "log_date": 1571689465534,
+      "log_action": "Changed values: client.user.localPresence.status , client.user.localPresence.game.name"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values in botData.json changed!",
+      "log_date": 1571689465570,
+      "log_action": "Changed property values: maintenance, status, bot_game"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Changed game status value",
+      "log_date": 1571689809222,
+      "log_action": "function call took 2.217ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Successfully edited botData.json.",
+      "log_date": 1571689930407,
+      "log_action": "Changed value: game"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Changed game status value",
+      "log_date": 1571689930410,
+      "log_action": "function call took 1.657ms"
+   },
+   {
+      "log_type": "success",
+      "log_message": "Successfully changed game status of bot.",
+      "log_date": 1571689930430,
+      "log_action": "Changed it from test to test."
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values of bot client changed!",
+      "log_date": 1571690008562,
+      "log_action": "Changed values: client.user.localPresence.status , client.user.localPresence.game.name"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values in botData.json changed!",
+      "log_date": 1571690008594,
+      "log_action": "Changed property values: maintenance, status, bot_game"
+   },
+   {
+      "log_type": "maintenance",
+      "log_message": "Maintenance was disabled!",
+      "log_date": 1571690008605,
+      "log_action": "Disabling maintenance took 6.495ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Server admins got an message which contains information that maintenance was enabled!",
+      "log_date": 1571690016592,
+      "log_action": ""
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values of bot client changed!",
+      "log_date": 1571690016654,
+      "log_action": "Changed values: client.user.localPresence.status , client.user.localPresence.game.name"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values in botData.json changed!",
+      "log_date": 1571690016694,
+      "log_action": "Changed property values: maintenance, status, bot_game"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values of bot client changed!",
+      "log_date": 1571690024826,
+      "log_action": "Changed values: client.user.localPresence.status , client.user.localPresence.game.name"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Values in botData.json changed!",
+      "log_date": 1571690024870,
+      "log_action": "Changed property values: maintenance, status, bot_game"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Changed game status value",
+      "log_date": 1571690814650,
+      "log_action": "function call took 1.790ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Successfully edited botData.json.",
+      "log_date": 1571690814657,
+      "log_action": "Changed value: game"
+   },
+   {
+      "log_type": "success",
+      "log_message": "Successfully changed game status of bot.",
+      "log_date": 1571690814669,
+      "log_action": "Changed it from Monkeys are finished! to test."
    }
 ]

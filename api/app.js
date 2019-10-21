@@ -10,7 +10,10 @@ const now = require("performance-now");
 const commands = require("./../discord-bot-sourcefiles/bot-commands.json");
 
 var passport = require('passport');
-var Strategy = require('../lib').Strategy;
+const Strategy = require("passport-discord").Strategy;
+//var Strategy = require('../lib').Strategy;
+const helmet = require("helmet");
+const url = require("url");
 
 const chalk = require('chalk');
 const ctx = new chalk.constructor({level: 3});
@@ -34,7 +37,6 @@ var exports = module.exports = {};
 exports.startApp = function (/**Object*/ client) {
 
     let port = config.port;
-
     
     passport.serializeUser(function(user, done) {
         done(null, user);
@@ -57,7 +59,7 @@ exports.startApp = function (/**Object*/ client) {
           });
       }));
 
-
+   
     let maintenanceStatus = botData.maintenance;
     app.set('view engine', 'ejs');
     app.set('port', port);
@@ -73,50 +75,96 @@ exports.startApp = function (/**Object*/ client) {
     app.set('bot', bot);
     app.set('maintenanceStatus', maintenanceStatus);
     app.set('log', log);
-
+    app.set('prefix', config.settings.prefix);
+    app.set('commands', commands);
     
-    app.use(session({secret: 'ssshhhhh',
-    resave: false,
-    saveUninitialized: false,}));
+    app.use(session({
+        secret: 'ssshhhhh',
+        resave: false,
+        saveUninitialized: false,
+    }));
 
     require ('./router')(app);
 
     
     app.use(passport.initialize());
     app.use(passport.session());
-    app.get('/login', passport.authenticate('discord', { scope: scopes }), function(req, res) {});
-      
+    app.use(helmet());
+
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({
         extended: true
     }));
 
+    function checkAuth(req, res, next) {
+        if (req.isAuthenticated()) return next();
+        req.session.backURL = req.url;
+        res.redirect("/login");
+      }
+     
+    /** PAGE ACTIONS RELATED TO SESSIONS */
+
+  // The login page saves the page the person was on in the session,
+  // then throws the user to the Discord OAuth2 login page.
+  app.get("/login", (req, res, next) => {
+    if (req.session.backURL) {
+      req.session.backURL = req.session.backURL;
+    } else if (req.headers.referer) {
+      const parsed = url.parse(req.headers.referer);
+      if (parsed.hostname === app.locals.domain) {
+        req.session.backURL = parsed.path;
+      }
+    } else {
+      req.session.backURL = "/";
+    }
+    console.log(req.session)
+    next();
+  },
+  passport.authenticate('discord', { scope: scopes }));
+      
+    
+
     // ---- GET  
     app.get('/callback',
-    passport.authenticate('discord', { failureRedirect: '/' }), function(req, res) { res.redirect('/profile'); app.set('member', req.user) } // auth success
-    
+    passport.authenticate('discord', { failureRedirect: '/' }), function(req, res) {
+          if (req.user.id === client.appInfo.owner.id) {
+      req.session.isAdmin = true;
+    } else {
+      req.session.isAdmin = false;
+    }
+    if (req.session.backURL) {
+      const url = req.session.backURL;
+      req.session.backURL = null;
+      res.redirect(url);
+    } else {
+      res.redirect("/");
+    }
+     app.set('member', req.user) } // auth success
 );
 
 app.get('/logout', function(req, res) {
-    req.logout();
-    res.redirect('/');
+    req.session.destroy(() => {
+        req.logout();
+        app.set('member', null)
+        res.redirect("/"); //Inside a callback… bulletproof!
+      });
 });
 
 
-app.get('/home', checkAuth, function(req, res) {
-    //console.log(req.user)
+app.get('/dashboard', checkAuth, function(req, res) {
     var member = req.user;
-    //res.send(member);
-    //res.json(req.user);
     res.render('/manage', {member: req.user });
     console.log(member.username)
 });
 
-function checkAuth(req, res, next) {
+/*function checkAuth(req, res, next) {
     if (req.isAuthenticated()) return next();
     res.send('not logged in :(');
 }
-/*
+*/
+
+
+    /*
     app.get("/", (req, res) => {
         res.render("index", {data: client, maintenanceStatus: maintenanceStatus, botData: botData, member: req.user});
     });
@@ -131,29 +179,31 @@ function checkAuth(req, res, next) {
 
    app.get("/messages", (req, res) => {
         res.render("messages", {data: client, maintenanceStatus: maintenanceStatus, member: req.user});
-    });*/
+    });
 
-    /*app.get("/outputClient", (req, res) => {
+    app.get("/outputClient", (req, res) => {
         let t0 = now();
         console.log(bot.sendClientObject(t0));
-        res.redirect("/dashboard");
+        res.redirect("/manage");
     });
   
 
     app.get("/outputGuilds", (req, res) => {
         let t0 = now();
         console.log(bot.sendGuildsObject(t0));
-        res.redirect("/dashboard");
+        res.redirect("/manage");
     });
-    */
-    /*app.get("/log", (req, res) => {
+   
+    
+    app.get("/log", (req, res) => {
         res.render("log", {
             data: client,
             maintenanceStatus: maintenanceStatus,
             log: log,
             member: req.user
         })
-    });*/
+    });
+     */
 
     app.get("/manage", (req, res) => {
         res.render("manage", {
@@ -167,6 +217,7 @@ function checkAuth(req, res, next) {
         })
     });
 
+
     app.get("/botStatus", (req, res) => {
         res.render("botStatus", {data: client, maintenanceStatus: maintenanceStatus, member: req.user});
     });
@@ -179,14 +230,14 @@ function checkAuth(req, res, next) {
         let t0 = now();
         bot.maintenance(true, t0);
         maintenanceStatus = true;
-        res.redirect("/dashboard");
+        res.redirect("/manage");
     });
 
     app.get("/deactivateMaintenance", (req, res) => {
         let t0 = now();
         bot.maintenance(false, t0);
         maintenanceStatus = false;
-        res.redirect("/dashboard");
+        res.redirect("/manage");
     });
 
     /* This GET route is for development usage only.
@@ -210,15 +261,15 @@ function checkAuth(req, res, next) {
         bot.setGameStatus(req.body.gameStatus, false, now());
 
         // TODO: Updating the config.json with the new bot_game value to get the new game value when restarting the bot.
-        bot.setBotStatus(req.body.gameStatus, false);
+       // bot.setBotStatus(req.body.gameStatus, false);
         var fs = require('fs')
-        fs.readFile('.\..\config.json', 'utf8', function (err,data) {
+        fs.readFile('.\botData.json', 'utf8', function (err,data) {
             if (err) {
                 return console.log(err);
             }
             var result = data.replace(bot_game, req.body.gameStatus);
 
-            fs.writeFile('.\..\config.json', result, 'utf8', function (err) {
+            fs.writeFile('.\botData.json', result, 'utf8', function (err) {
                 if (err) return console.log(err);
             });
         });
@@ -228,23 +279,24 @@ function checkAuth(req, res, next) {
     });
 
     app.post("/change-status", (req, res) => {
-
+        console.log(req.body.status)
+        var botStatus = botData.bot_status;
         bot.setBotStatus(req.body.status, false);
         var fs = require('fs')
-        fs.readFile('.\..\config.json', 'utf8', function (err,data) {
+        fs.readFile('.\botData.json', 'utf8', function (err,data) {
             if (err) {
                 return console.log(err);
             }
             var result = data.replace(bot_status, req.body.status);
 
-            fs.writeFile('.\..\config.json', result, 'utf8', function (err) {
+            fs.writeFile('.\botData.json', result, 'utf8', function (err) {
                 if (err) return console.log(err);
             });
         });
 
 
-        res.redirect("/");
-        console.log("\n>> Redirecting to /");
+        res.redirect("/manage");
+        console.log("\n>> Redirecting to manage");
     });
 
     app.post("/send-serveradmin-dm-message", (req, res) => {

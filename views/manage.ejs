@@ -1,67 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Discord Bot Dashboard</title>
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,900" rel="stylesheet">
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
-    <meta name="author" content="Julian Yaman">
-    <meta name="description" content="A tool for Discord.js bot developers to manage their bot for development and final release usages.">
-    <link rel="stylesheet" href="../styles/styles.css">
+    <link rel="stylesheet" href="../src/styles.css">
+
 </head>
+
 <body>
-        <%- include('./templates/nav'); %>
-<div>
-    <main class="mdl-layout__content">
-        <!-- page content -->
-        <div class="page-content">
-            <div class="mdl-grid">
-                <div class="mdl-cell mdl-cell--2-col"></div>
-                <div class="mdl-cell mdl-cell--8-col">
-                    <h1><b>Management</b></h1>
-                    <hr>
-                    <div class="manageContainer management_commandsContainer">
-                        <h3><b>All commands: </b><br><small>I highly recommend to add here all commands you´re using for better management</small></h3>
-                        <h3><b>Your current command prefix: <%= prefix %></b></h3>
-                        <p>Add Commands here or in the bot-commands.json</p>
-                        <hr>
-                        <h4><b>Adding a command:</b></h4>
-                        <form method="post" action="/addCommand">
-                            <input class="commandInputSection" placeholder="Type here your command" name="commandName">
-                            <br><br>
-                            <button class="commandSubmitButton mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit">Add command</button>
-                        </form>
-                        <hr>
-                        <ul class="commandList">
-                            <% commands.forEach((command) => {  %>
-                                <li class="commandListItem">
-                                    <p class="commandName"><%= prefix %><%= command.commandName %></p>
-                                    <hr>
-                                    <p class="commandFunctionHeadline">Function / Content:</p>
-                                    <div class="commandFunction"></div>
-                                    <hr>
-                                    <p>
-                                        Available in maintenance:
-                                        <% if(command.availableInMaintenance === false){ %>
-                                            <span class="commandAvailableInMaintenance commandAvailableInMaintenanceFalse">No</span>
-                                        <% }else{ %>
-                                            <span class="commandAvailableInMaintenance commandAvailableInMaintenanceTrue">Yes</span>
-                                        <% } %>
-                                    </p>
-                                </li>
-                            <% }) %>
-                        </ul>
+    <%- include('./templates/nav'); %>
+
+    <div class="container justify-content-center">
+
+        <h1><b>Dashboard</b></h1>
+        <hr>
+
+        <div class="card border-success mb-3">
+            <div class="card-header">
+                <h5 class="card-title">Bot Status</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-auto border-right">
+                        <p class="card-text">
+                            <p class="bot_username"><b>Name:</b> <%= data.user.username %></p>
+                            <p class="bot_game"><b>Current game:</b> <%= data.user.localPresence.game.name %></p>
+                            <span class="bot_status"><b>Status:</b>
+                                <% if(data.user.localPresence.status === "online"){ %>
+                                <div class="statusSymbol statusSymbolOnline"></div> Online
+                                <% }else if(data.user.localPresence.status === "idle"){ %>
+                                <div class="statusSymbol statusSymbolIdle"></div> Idle
+                                <% }else if(data.user.localPresence.status === "dnd"){ %>
+                                <div class="statusSymbol statusSymbolDND"></div> Do Not Disturb
+                                <% }else if(data.user.localPresence.status === "invisible"){ %>
+                                <div class="statusSymbol statusSymbolInvisible"></div> Invisible
+                                <% }%>
+                            </span>
+                            <hr>
+                            <h4><b>Maintenance:</b></h4>
+                            <!--<p class="warning"><b>Warning! &raquo; </b>This function is in a early status!</p>-->
+                            <% if(maintenanceStatus == false){ %>
+                            <button id="enableButtonForMaintanance" style="width: 100%;" class="btn btn-danger">Activate
+                                Maintenance</button><br class="brMaintenance"><br class="brMaintenance">
+                            <a href="/activateMaintenance"><button style="width: 100%;" id="maintenanceActivatingButton"
+                                    disabled class="btn">Confirming Maintenance</button></a>
+                            <% }else{ %>
+                            <a href="/deactivateMaintenance"><button style="width: 100%;"
+                                    class="btn btn-success">Deactivate Maintenance</button></a>
+                            <% } %>
+                        </p>
                     </div>
-                </div>
-                <div class="mdl-cell mdl-cell--2-col">
+
+                    <div class="col-sm-auto">
+                        <p class="card-text">
+                            <h4><b>Game Status:</b><br><small>Change here the game from your bot.</small></h4>
+                            <form method="post" class="changeGame" action="/change-game-status" class="form-inline">
+                                <div class="input-group mb-3">
+                                    <input class="form-control" type="text" name="gameStatus" id="gameChangeInput">
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-primary">Save Game Status</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <hr>
+                            <h4><b>Change Status:</b><br><small>Change status of your bot.</small></h4>
+                            <form method="post" action="/change-status" class="form-inline">
+                                <div class="input-group mb-3">
+                                    <select class="form-control" name="status">
+                                        <option value="<%= data.user.localPresence.status %>">Current status:
+                                            <%= data.user.localPresence.status %></option>
+                                        <option value="online">Online</option>
+                                        <option value="idle">Idle</option>
+                                        <option value="dnd">Do not Disturb</option>
+                                        <option value="invisible">Invisible</option>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-primary">
+                                            Change Status
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                            <hr>
+                            <h4><b>Development:</b><br><small>Here you can add some test features for your own project.
+                                    I added some functions which may be helpful for you!</small></h4>
+                            <a href="/outputClient"><button id="outputClientObjBtn" class="btn btn-secondary">Output
+                                    Client Object</button></a>
+                            <a href="/outputGuilds"><button id="outputClientObjBtn" class="btn btn-secondary">Output
+                                    Guilds Object</button></a>
+                            <a href="/testingNewFunction"><button id="testNewFunctionBtn" class="btn btn-info">Testing a
+                                    new function</button></a>
+                        </p>
+                    </div>
+
                 </div>
             </div>
         </div>
-    </main>
-</div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="../scripts/dashboard.js"></script>
-<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="../scripts/dashboard.js"></script>
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 </body>
+
 </html>

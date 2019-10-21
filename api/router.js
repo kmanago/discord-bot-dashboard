@@ -1,11 +1,12 @@
 module.exports = (app) => {
     app.use('/', require('./routes/index'));
-    app.use('/dashboard', require('./routes/index'));
+    app.use('/dashboard', require('./routes/dashboard'));
     app.use('/profile', require('./routes/profile'));
 
     
     app.use('/messages', require('./routes/messages'));
     app.use('/log', require('./routes/log'));
+    //app.use('/manage', require('./routes/manage'));
 
 
     //function routes/
