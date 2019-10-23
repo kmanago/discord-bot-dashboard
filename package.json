@@ -4,7 +4,7 @@
   "description": "A tool for Discord.js bot developers to manage their bot for development and final release usages.",
   "main": "main.js",
   "scripts": {
-    "start": "nodemon --ignore sessions/ main.js"
+    "start": "nodemon main.js"
   },
   "repository": {
     "type": "git",

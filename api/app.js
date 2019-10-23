@@ -226,11 +226,14 @@ app.get('/dashboard', checkAuth, function(req, res) {
         res.render("botStatusPage", {data: client, botData: botData, member: req.user});
     });
 
-    app.get("/activateMaintenance", (req, res) => {
+    app.get("/activateMaintenance", (req, res, next) => {
         let t0 = now();
         bot.maintenance(true, t0);
         maintenanceStatus = true;
-        res.redirect("/manage");
+        //res.redirect('/manage')
+        res.set({'Refresh': '2; url=/manage'});
+        res.render('activateMaintenance', {data: client, maintenanceStatus: maintenanceStatus, botData: botData, member: req.user,
+            commands: commands, prefix: config.settings.prefix, log: log});    
     });
 
     app.get("/deactivateMaintenance", (req, res) => {
@@ -254,7 +257,7 @@ app.get('/dashboard', checkAuth, function(req, res) {
     });
 
     // ---- POST
-
+/*
     app.post("/change-game-status" ,(req, res) => {
 
         // Using the exports function from the required "./main" module to set the game
@@ -263,40 +266,42 @@ app.get('/dashboard', checkAuth, function(req, res) {
         // TODO: Updating the config.json with the new bot_game value to get the new game value when restarting the bot.
        // bot.setBotStatus(req.body.gameStatus, false);
         var fs = require('fs')
-        fs.readFile('.\botData.json', 'utf8', function (err,data) {
+        fs.readFile('./botData.json', 'utf8', function (err,data) {
             if (err) {
                 return console.log(err);
             }
-            var result = data.replace(bot_game, req.body.gameStatus);
+            var result = data.replace(botData.bot_game, req.body.gameStatus);
 
-            fs.writeFile('.\botData.json', result, 'utf8', function (err) {
+            fs.writeFile('./botData.json', result, 'utf8', function (err) {
                 if (err) return console.log(err);
             });
         });
        
-        res.redirect("/");
+        //res.redirect("/");
         console.log("\n>> Redirecting to /");
+        res.redirect('back');
     });
 
     app.post("/change-status", (req, res) => {
-        console.log(req.body.status)
-        var botStatus = botData.bot_status;
-        bot.setBotStatus(req.body.status, false);
+        console.log(`Status changing too from webpage: ` +req.body.status)
+       // var botStatus = botData.bot_status;
+        bot.setBotStatus(req.body.status, maintenanceStatus);
         var fs = require('fs')
-        fs.readFile('.\botData.json', 'utf8', function (err,data) {
+        fs.readFile('./botData.json', 'utf8', function (err,data) {
             if (err) {
                 return console.log(err);
             }
-            var result = data.replace(bot_status, req.body.status);
+            var result = data.replace(botData.bot_status, req.body.status);
 
-            fs.writeFile('.\botData.json', result, 'utf8', function (err) {
+            fs.writeFile('./botData.json', result, 'utf8', function (err) {
                 if (err) return console.log(err);
             });
         });
 
-
-        res.redirect("/manage");
+       // res.redirect(req.get('referer'));
+        //res.redirect("/manage");
         console.log("\n>> Redirecting to manage");
+        res.redirect('back');
     });
 
     app.post("/send-serveradmin-dm-message", (req, res) => {
@@ -306,7 +311,7 @@ app.get('/dashboard', checkAuth, function(req, res) {
         res.redirect("/messages");
         console.log("\n>> Redirecting to /messages");
     });
-
+*/
 
 
     // ---- 404 Page
@@ -357,6 +362,10 @@ exports.dmNotification = function (/**String*/user,/**String*/content,/**Integer
 
     console.log(chalk.greenBright('Message sent at ' + day + ", " + date.getMonth() +  "/" + date.getDate() + "/" + date.getFullYear() + ", " + date.getHours() + ':' + minutes.substr(-2) + ":" + seconds.substr(-2) + ' \n'));
 };
+
+
+
+
 
 /**
  * Converting the integer from Date.getDay() to a string which contains the day.

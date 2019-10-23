@@ -336,7 +336,10 @@ exports.setGameStatus = function (/**String*/ game,/**boolean*/maintenanceChange
     // You have another idea how to store this values? Then make a Pull Request in GitHub! :)
 
     let gameBeforeChanging = client.user.localPresence.game.name;
-    client.user.setGame(game);
+    //client.user.setGame(game);
+    client.user.setActivity(game, { type: 'PLAYING' })
+    .then(presence => console.log(`Activity set to ${presence.game ? presence.game.name : 'none'}`))
+    .catch(console.error);
 
     console.log("\n>> Bot Change > Game status set to: " + game);
 
@@ -409,15 +412,14 @@ exports.setBotStatus = function (/**String*/ status,/**boolean*/maintenanceChang
         
 
         if(maintenanceChange === false) {
-
             // Change value in botData.json
             fs.readFile('./botData.json', "utf-8", function (err, data) {
                 if (err) throw err;
                 let botData = JSON.parse(data);
-                console.log(botData)
+                //console.log(botData)
                 // Setting new status value
                 botData.bot_status = status;
-                console.log(botData)
+                //console.log(botData)
                 // Writing new value into the json file
                 fs.writeFile('./botData.json', JSON.stringify(botData, null, 3), 'utf-8', function (err) {
                     if (err) throw err;
@@ -447,7 +449,7 @@ exports.sendAdminMessage = function (/**String*/ message) {
     let guilds = client.guilds;
 
     guilds.map(function (a) {
-        a.owner.send(`You've received a message from the portal: \n`)
+        a.owner.send(`You've received a message from the portal: \n\n`)
         a.owner.send(message);
         console.log(">> Bot Action > Server Admin DM sent to: " + a.owner.user.username + " - Server Admin of the server: " + a.name);
     });
@@ -528,14 +530,20 @@ exports.sendInvitesOfServers = function () {
 exports.maintenance = function (/**boolean*/ maintenanceBool, /**Number*/t0) {
     if(maintenanceBool === true){
         // localPresence values before the maintenance starts
+        this.sendAdminMessage("Hello dear server admin. I´m currently in maintenance mode. We will inform you when we finished our maintenance!");
         let statusBeforeChanging  = client.user.localPresence.status;
         let gameBeforeChanging    = client.user.localPresence.game.name;
 
         // Set new values to the bot user
         this.setBotStatus("dnd", true);
         this.setGameStatus("Monkeys are working!", true);
-        this.sendAdminMessage("Hello dear server admin. I´m currently in maintenance mode. We will inform you when we finished our maintenance!");
+       //client.fetchUser('252638038650257429').then(user => {user.send("Hello I dmed you!")})
+    
+        //this.users.get('252638038650257429').message("hello")
+      
+         /* 
 
+         //issue has something to do with the adding to log
         app.addLog({
             "log_type" : "info",
             "log_message" : "Server admins got an message which contains information that maintenance was enabled!",
@@ -543,6 +551,7 @@ exports.maintenance = function (/**boolean*/ maintenanceBool, /**Number*/t0) {
             "log_action" : ""
         });
 
+        
         setTimeout(function(){
             app.addLog({
                 "log_type" : "info",
@@ -670,6 +679,7 @@ exports.maintenance = function (/**boolean*/ maintenanceBool, /**Number*/t0) {
                 "log_action": "Disabling maintenance took " + (t1 - t0).toFixed(3) + "ms"
             });
         }, 100)
+        */
     }
 };
 
