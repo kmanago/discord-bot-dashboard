@@ -13,94 +13,46 @@
 
 <body>
     <%- include('./templates/nav'); %>
-
-    <div class="container justify-content-center">
-
-        <h1><b>Dashboard</b></h1>
-        <hr>
-
-        <div class="card border-success mb-3">
-            <div class="card-header">
-                <h5 class="card-title">Bot Status</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-sm-auto border-right">
-                        <p class="card-text">
-                            <p class="bot_username"><b>Name:</b> <%= data.user.username %></p>
-                            <p class="bot_game"><b>Current game:</b> <%= data.user.localPresence.game.name %></p>
-                            <span class="bot_status"><b>Status:</b>
-                                <% if(data.user.localPresence.status === "online"){ %>
-                                <div class="statusSymbol statusSymbolOnline"></div> Online
-                                <% }else if(data.user.localPresence.status === "idle"){ %>
-                                <div class="statusSymbol statusSymbolIdle"></div> Idle
-                                <% }else if(data.user.localPresence.status === "dnd"){ %>
-                                <div class="statusSymbol statusSymbolDND"></div> Do Not Disturb
-                                <% }else if(data.user.localPresence.status === "invisible"){ %>
-                                <div class="statusSymbol statusSymbolInvisible"></div> Invisible
-                                <% }%>
-                            </span>
-                            <hr>
-                            <h4><b>Maintenance:</b></h4>
-                            <!--<p class="warning"><b>Warning! &raquo; </b>This function is in a early status!</p>-->
-                            <% if(maintenanceStatus == false){ %>
-                            <button id="enableButtonForMaintanance" style="width: 100%;" class="btn btn-danger">Activate
-                                Maintenance</button><br class="brMaintenance"><br class="brMaintenance">
-                            <a href="/activateMaintenance"><button style="width: 100%;" id="maintenanceActivatingButton"
-                                    disabled class="btn">Confirming Maintenance</button></a>
-                            <% }else{ %>
-                            <a href="/deactivateMaintenance"><button style="width: 100%;"
-                                    class="btn btn-success">Deactivate Maintenance</button></a>
-                            <% } %>
-                        </p>
-                    </div>
-
-                    <div class="col-sm-auto">
-                        <p class="card-text">
-                            <h4><b>Game Status:</b><br><small>Change here the game from your bot.</small></h4>
-                            <form method="post" class="changeGame" action="/change-game-status" class="form-inline">
-                                <div class="input-group mb-3">
-                                    <input class="form-control" type="text" name="gameStatus" id="gameChangeInput">
-                                    <div class="input-group-append">
-                                        <button type="submit" class="btn btn-primary">Save Game Status</button>
-                                    </div>
-                                </div>
-                            </form>
-
-                            <hr>
-                            <h4><b>Change Status:</b><br><small>Change status of your bot.</small></h4>
-                            <form method="post" action="/change-status" class="form-inline">
-                                <div class="input-group mb-3">
-                                    <select class="form-control" name="status">
-                                        <option value="<%= data.user.localPresence.status %>">Current status:
-                                            <%= data.user.localPresence.status %></option>
-                                        <option value="online">Online</option>
-                                        <option value="idle">Idle</option>
-                                        <option value="dnd">Do not Disturb</option>
-                                        <option value="invisible">Invisible</option>
-                                    </select>
-                                    <div class="input-group-append">
-                                        <button type="submit" class="btn btn-primary">
-                                            Change Status
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                            <hr>
-                            <h4><b>Development:</b><br><small>Here you can add some test features for your own project.
-                                    I added some functions which may be helpful for you!</small></h4>
-                            <a href="/outputClient"><button id="outputClientObjBtn" class="btn btn-secondary">Output
-                                    Client Object</button></a>
-                            <a href="/outputGuilds"><button id="outputClientObjBtn" class="btn btn-secondary">Output
-                                    Guilds Object</button></a>
-                            <a href="/testingNewFunction"><button id="testNewFunctionBtn" class="btn btn-info">Testing a
-                                    new function</button></a>
-                        </p>
-                    </div>
-
-                </div>
-            </div>
-        </div>
+    <h1 class="display-3">Dashboard</h1>
+    <ul class="list-unstyled">
+      <% 
+      member.guilds.forEach(guild => { 
+        const permsOnGuild = new perms(guild.permissions);
+        if(!permsOnGuild.has("MANAGE_GUILD")) return;
+        if(data.guilds.get(guild.id)) { 
+      %>
+    
+      <li class="media" style="padding: 10px;">
+        <% if (guild.icon) { %>
+          <img class="d-flex mr-3 rounded-circle" src="<%= `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=128` %>" style="width: 80px;" alt="">
+        <% } else { %>
+          <canvas style="background-color: #7289da" class="d-flex mr-3 rounded-circle" id="<%= guild.name.split(' ').join('').replace(`'`, ``) %>" width="80px" height="80px"></canvas>
+          <script>
+            function draw() {
+              const ctx = document.getElementById("<%= guild.name.split(' ').join('').replace(`'`, ``) %>").getContext('2d');
+              ctx.font = '30px Arial';
+              ctx.textAlign = "center";
+              ctx.fillStyle = "white";
+              ctx.fillText("<%= guild.name.split(' ').map(v => v[0]).join('') %>", 40, 50);
+            };
+            draw();
+          </script>
+        <% } %>
+        <div class="media-body">
+            <h5 class="mt-0 mb-1"><%= guild.name %></h5>
+            <% 
+            let href, text;
+            let enabled;    
+              href = `/dashboard/${guild.id}/guild-card`;
+              text = "card";
+              enabled = true;
+            %> 
+            <a class="btn btn-primary btn-lg<% if(!enabled) { %> disabled<% } %>" role="button" href="<%= href %>"><%= text %> <i class="fa fa-fw fa-chevron-circle-right" aria-hidden="true"></i></a>
+          </div>
+        </li>
+      <% }}); %>
+      </ul>
+    
 
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

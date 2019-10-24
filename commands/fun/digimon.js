@@ -3,7 +3,7 @@ var querystring = require('querystring');
 module.exports = {
 	name: 'digimon',
 	description: '',
-    category: 'fun',
+    category: 'Fun',
     usage: '!digimon',
 	async execute(message, args) {
         let filter = args[0];

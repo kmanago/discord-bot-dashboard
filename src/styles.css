@@ -186,6 +186,7 @@ body{
     margin-bottom: 5px;
     font-size: 16px;
 }
+
 .logContainer ul li.log_success{
     border-left: 6px solid #2ECC71;
 }
@@ -196,6 +197,7 @@ body{
     border-left: 6px solid #E74C3C;
 }
 .logContainer ul li.log_maintenance{
+    /*border-left: 6px solid #fcb603;*/
     border-left: 6px solid #C0392B;
     background: #E74C3C;
     font-weight: bold;

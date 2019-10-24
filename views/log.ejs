@@ -19,7 +19,7 @@
                     <div class="logContainer" class="scrollbar" id="style-4">
                         <ul>
                             <% log.forEach((log) => {%>
-                                <li class="<%= "log_" + log.log_type %>">
+                                <li class="<%= "log_" + log.level %>">
                                     <%
 
                                         let convertingGetDay = function (getDay) {
@@ -52,7 +52,7 @@
                                             return day;
                                         };
 
-                                        let date = new Date(log.log_date);
+                                        let date = new Date(log.timestamp);
                                         let day = convertingGetDay(date.getDay());
 
                                         // To understand converting timestamps to a normal known date
@@ -66,8 +66,8 @@
 
                                     %>
                                     [<%= day + ", " + date.getMonth() +  "/" + date.getDate() + "/" + date.getFullYear() + ", " + date.getHours() + ':' + minutes.substr(-2) + ":" + seconds.substr(-2) %>]
-                                    <b><%= log.log_message %></b><br>
-                                    <small><%= log.log_action %></small>
+                                    <b><%= log.message %></b><br>
+                                    <small><%= log.action %></small>
 
                                 </li>
                             <% });%>

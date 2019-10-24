@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="../src/styles.css">
+
+</head>
+
+<body>
+    <%- include('./templates/nav'); %>
+
+    <div class="container justify-content-center">
+
+       
+<% const help = {};
+data.commands.forEach((command) => {
+  const cat = command.category;
+  if (!help.hasOwnProperty(cat)) help[cat] = [];
+  help[cat].push(command);
+});
+%>
+<div class="row">
+    <div class="col-4">
+      <div class="list-group" id="list-tab" role="tablist">
+          <% for (const category in help) { %>
+        <a class="list-group-item list-group-item-action" id="list-<%= category %>-list" data-toggle="list" href="#list-<%= category %>" role="tab" aria-controls=<%= category %>><%= category %></a>
+        <% } %>
+      </div>
+    </div>
+    <div class="col-8">
+      <div class="tab-content" id="nav-tabContent">
+          <% for (const category in help) { %>
+        <div class="tab-pane fade" id="list-<%= category %>" role="tabpanel" aria-labelledby="list-<%= category %>-list">
+          <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Command Name</th>
+                  <th scope="col">description</th>
+                </tr>
+              </thead>
+              <tbody>
+                  <% for (const command of help[category]) { %>
+                  <tr>
+                    <td><%= command.name %> </td>
+                    <td><%= command.description %> </td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+          </div>
+        <% } %>
+      </div>
+   
+    </div>
+  </div>
+
+
+
+
+  <% for (const category in help) { %>
+    <h3><%= category %></h3>
+    <br>
+    <div class="card-columns">
+      <% for (const command of help[category]) { %>
+        <div class="card">
+          <h3 class="card-header"><%= command.name %></h3>
+          <div class="card-body">
+            <p class="card-text"><%= command.description %></p>
+            <h6 class="card-subtitle text-muted"><a href="#" data-toggle="modal" data-target="#<%= `${command.name}` %>Modal">more...</a></h6>
+          </div>
+        </div>
+        <div id="<%= `${command.name}` %>Modal" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header btn-info disabled">
+                <h4 class="modal-title"><%= command.name %></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <div class="modal-body">
+                <p>Usage Example: <%= command.usage %></p>
+                <p>Command Aliases: <%= `${command.aliases}` %></p>
+              </div>
+              <div class="modal-footer"><button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button></div>
+            </div>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  <% } %>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="../scripts/dashboard.js"></script>
+  <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+  </div>
+</body>
+
+</html>

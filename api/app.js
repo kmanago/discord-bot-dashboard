@@ -3,11 +3,12 @@ const botData = require("./../botData.json");
 const express = require('express');
 const session = require('express-session');
 const bot = require("./../main.js");
-const log = require("./../log.json");
+const log = require("../logs/logs.json");
 const fs = require("fs");
 const bodyParser = require('body-parser');
 const now = require("performance-now");
 const commands = require("./../discord-bot-sourcefiles/bot-commands.json");
+const Discord = require('discord.js');
 
 var passport = require('passport');
 const Strategy = require("passport-discord").Strategy;
@@ -117,7 +118,6 @@ exports.startApp = function (/**Object*/ client) {
     } else {
       req.session.backURL = "/";
     }
-    console.log(req.session)
     next();
   },
   passport.authenticate('discord', { scope: scopes }));
@@ -140,6 +140,7 @@ exports.startApp = function (/**Object*/ client) {
       res.redirect("/");
     }
      app.set('member', req.user) } // auth success
+     
 );
 
 app.get('/logout', function(req, res) {
@@ -150,11 +151,16 @@ app.get('/logout', function(req, res) {
       });
 });
 
-
+/*
 app.get('/dashboard', checkAuth, function(req, res) {
     var member = req.user;
-    res.render('/manage', {member: req.user });
-    console.log(member.username)
+    res.render('dashboard', {data: client, maintenanceStatus: maintenanceStatus, member: req.user });
+});
+*/
+
+app.get('/commands', function(req, res) {
+    const perms = Discord.EvaluatedPermissions;
+    res.render('commands', {data: client, maintenanceStatus: maintenanceStatus, member: req.user, perms: perms });
 });
 
 /*function checkAuth(req, res, next) {
@@ -162,49 +168,7 @@ app.get('/dashboard', checkAuth, function(req, res) {
     res.send('not logged in :(');
 }
 */
-
-
-    /*
-    app.get("/", (req, res) => {
-        res.render("index", {data: client, maintenanceStatus: maintenanceStatus, botData: botData, member: req.user});
-    });
-
-    app.get("/home", (req, res) => {
-        res.render("index", {data: client, maintenanceStatus: maintenanceStatus, botData: botData, member: req.user});
-    });
-
-    app.get("/dashboard", (req, res) => {
-        res.render("index", {data: client, maintenanceStatus: maintenanceStatus, botData: botData, member: req.user});
-    });
-
-   app.get("/messages", (req, res) => {
-        res.render("messages", {data: client, maintenanceStatus: maintenanceStatus, member: req.user});
-    });
-
-    app.get("/outputClient", (req, res) => {
-        let t0 = now();
-        console.log(bot.sendClientObject(t0));
-        res.redirect("/manage");
-    });
-  
-
-    app.get("/outputGuilds", (req, res) => {
-        let t0 = now();
-        console.log(bot.sendGuildsObject(t0));
-        res.redirect("/manage");
-    });
-   
-    
-    app.get("/log", (req, res) => {
-        res.render("log", {
-            data: client,
-            maintenanceStatus: maintenanceStatus,
-            log: log,
-            member: req.user
-        })
-    });
-     */
-
+/*
     app.get("/manage", (req, res) => {
         res.render("manage", {
             data: client,
@@ -216,7 +180,7 @@ app.get('/dashboard', checkAuth, function(req, res) {
             member: req.user
         })
     });
-
+*/
 
     app.get("/botStatus", (req, res) => {
         res.render("botStatus", {data: client, maintenanceStatus: maintenanceStatus, member: req.user});
@@ -226,22 +190,7 @@ app.get('/dashboard', checkAuth, function(req, res) {
         res.render("botStatusPage", {data: client, botData: botData, member: req.user});
     });
 
-    app.get("/activateMaintenance", (req, res, next) => {
-        let t0 = now();
-        bot.maintenance(true, t0);
-        maintenanceStatus = true;
-        //res.redirect('/manage')
-        res.set({'Refresh': '2; url=/manage'});
-        res.render('activateMaintenance', {data: client, maintenanceStatus: maintenanceStatus, botData: botData, member: req.user,
-            commands: commands, prefix: config.settings.prefix, log: log});    
-    });
-
-    app.get("/deactivateMaintenance", (req, res) => {
-        let t0 = now();
-        bot.maintenance(false, t0);
-        maintenanceStatus = false;
-        res.redirect("/manage");
-    });
+    
 
     /* This GET route is for development usage only.
      * With this route, you can test new functions for your fork
@@ -330,6 +279,8 @@ app.get('/dashboard', checkAuth, function(req, res) {
     });
 
 };
+
+
 
 /**
  * This function sends a notification to the discord bot dashboard user

@@ -2,7 +2,7 @@ const config = require('../../config.json');
 module.exports = {
     name: 'delchannel',
     description: 'Deletes a channel. You must have the ADMINISTRATOR permissions to run the command.',
-    channel: 'Administration',
+    category: 'Administration',
     usage: '!delchannel [channelName]',
     args: true,
     guildOnly: true,

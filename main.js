@@ -5,38 +5,43 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 const config = require("./config.json");
 const botconfig = require("./botData.json");
-
+const logger = require('./logs/logger.js')
 
 const now = require("performance-now");
-
-
 const chalk = require('chalk');
+
+/*
+logger.log( {level: 'info',
+message: 'What time is the testing at?',
+action: 'a question'});
+*/
+
 
 const Enmap = require("enmap");
 //create command collection and get all command files
 client.commands = new Discord.Collection(); // Collection for all commands
 client.aliases = new Discord.Collection(); // Collection for all aliases of every command
 
-client.userprofile = new Enmap({name: "profile"});
+client.userprofile = new Enmap({ name: "profile" });
 exports.up = client.userprofile;
 
 
-const modules = ['Administration', 'Fun', 'Management', 'Moderation', 'Misc', 'Roles', 'Users']; 
+const modules = ['Administration', 'Fun', 'Management', 'Moderation', 'Misc', 'Roles', 'Users'];
 // This will be the list of the names of all modules (folder) your bot owns
 
 modules.forEach(c => {
-	fs.readdir(`./commands/${c}/`, (err, files) => { // Here we go through all folders (modules)
-		if (err) throw err; // If there is error, throw an error in the console
-		console.log(`[Commandlogs] Loaded ${files.length} commands of module ${c}`); 
-		// When commands of a module are successfully loaded, you can see it in the console
+    fs.readdir(`./commands/${c}/`, (err, files) => { // Here we go through all folders (modules)
+        if (err) throw err; // If there is error, throw an error in the console
+        console.log(`[Commandlogs] Loaded ${files.length} commands of module ${c}`);
+        // When commands of a module are successfully loaded, you can see it in the console
 
-		files.forEach(f => { // Now we go through all files of a folder (module)
-			const command = require(`./commands/${c}/${f}`); // Location of the current command file
-			client.commands.set(command.name, command); // Now we add the commmand in the client.commands Collection which we defined in previous code
-			client.aliases.set(command.name,command.aliases);
-		});
-	});
-});	
+        files.forEach(f => { // Now we go through all files of a folder (module)
+            const command = require(`./commands/${c}/${f}`); // Location of the current command file
+            client.commands.set(command.name, command); // Now we add the commmand in the client.commands Collection which we defined in previous code
+            client.aliases.set(command.name, command.aliases);
+        });
+    });
+});
 
 const channels = require('./channels.json');
 const ac = channels.allowed;
@@ -53,7 +58,7 @@ const cooldowns = new Discord.Collection();
 
 
 // Executed when the bot is ready!
- client.on('ready', async () => {
+client.on('ready', async () => {
     // Console output for showing that the bot is running.
     console.log(chalk.greenBright('\n>> Bot is ready!'));
     console.log('>> Logged in as ' + client.user.username);
@@ -61,49 +66,55 @@ const cooldowns = new Discord.Collection();
     client.user.setActivity(botconfig.bot_game);
     client.user.setStatus(botconfig.bot_status)
     console.log(`Connected as ${client.user.tag}`)
-    client.appInfo = await client.fetchApplication().then(application =>
-        {
-            return application;
-        }
+    client.appInfo = await client.fetchApplication().then(application => {
+        return application;
+    }
     )
     //console.log(client.appInfo)
     // This is starting the app.
     app.startApp(client);
+    //logger.log('info', 'The bot is online!');
 });
+
+//other loggins
+/*client.on('warn', m => logger.log('warn', m));
+client.on('error', m => logger.log('error', m));
+
+process.on('uncaughtException', error => logger.log('error', error));*/
 
 // If your code editor says that () => is an error, change it to function()
 // Executed when message event
 //welcomemessage
 client.on("guildMemberAdd", (member) => {
-	//look for a channel with this name
-	const channel = member.guild.channels.find(ch => ch.name === 'arrivals');
+    //look for a channel with this name
+    const channel = member.guild.channels.find(ch => ch.name === 'arrivals');
 
-	//channel not found
-	if (!channel) return;
-	let guild = member.guild;
-		//channel.send(`Welcome ${member} to ${guild}!! ` + config.welcome);
-		//channel.send(config.welcome);
-		var wel = config.settings.welcome;
-		var str = wel.replace(/{member}/g, `${member}`);
-		var welcome = str.replace(/{server}/g, `**${guild}**`);
-		channel.send(welcome);
-	});
+    //channel not found
+    if (!channel) return;
+    let guild = member.guild;
+    //channel.send(`Welcome ${member} to ${guild}!! ` + config.welcome);
+    //channel.send(config.welcome);
+    var wel = config.settings.welcome;
+    var str = wel.replace(/{member}/g, `${member}`);
+    var welcome = str.replace(/{server}/g, `**${guild}**`);
+    channel.send(welcome);
+});
 
-	client.on("guildMemberRemove", (member) => {
-		//look for a channel with this name
-		const channel = member.guild.channels.find(ch => ch.name === 'departures');
-	
-		//channel not found
-		if (!channel) return;
+client.on("guildMemberRemove", (member) => {
+    //look for a channel with this name
+    const channel = member.guild.channels.find(ch => ch.name === 'departures');
 
-		//get server and set the goodbye message up with the correct inputs
-		let guild = member.guild;
-		var gb = config.settings.goodbye;
-		var str = gb.replace(/{member}/g, `${member}`);
-		var goodbye = str.replace(/{server}/g, `${guild}`);
-		channel.send(goodbye);
-		});
-	
+    //channel not found
+    if (!channel) return;
+
+    //get server and set the goodbye message up with the correct inputs
+    let guild = member.guild;
+    var gb = config.settings.goodbye;
+    var str = gb.replace(/{member}/g, `${member}`);
+    var goodbye = str.replace(/{server}/g, `${guild}`);
+    channel.send(goodbye);
+});
+
 
 
 
@@ -112,184 +123,184 @@ client.on("guildMemberAdd", (member) => {
 client.on('message', message => {
 
     //check message prefix and the bot
-	if (!message.content.startsWith(config.settings.prefix) || message.author.bot) return;
+    if (!message.content.startsWith(config.settings.prefix) || message.author.bot) return;
 
 	/******************
 	 * enmap xp
 	 ******************/
 
-	 //makes sure this isn't in a DM
-	if(message.guild){
-		//a key variable to simplfy the worth of points
-		const key =`${message.guild.id}-${message.author.id}`;
+    //makes sure this isn't in a DM
+    if (message.guild) {
+        //a key variable to simplfy the worth of points
+        const key = `${message.guild.id}-${message.author.id}`;
 
-		//triggers on new users
-		 client.userprofile.ensure(key, {
-			user: message.author.id,
-			guild: message.guild.id,
-			points: 10,
-			level: 1,
-			coins: 500,
-			warnlevel: 0,
-			bgcolor: '#f2f2f2',
-			maincolor: '#BAF0BA',
-			txtcolor: '#23272A',
-			title: 'This is a Title',
-			info: 'This is some text to act as my own personal status/info/about me. Whatever. Good news! It wraps text on its own.',
-			headerimg: 'https://pbs.twimg.com/media/CkCp_VhWYAAJcrU.jpg',
-			lastSeen: new Date()
-		  });
-		  //client.userprofile.inc(key, "points");
-		  //var newpoints=0;
-		  const newcoins = Math.floor(Math.random()*7)+ 8;
-		  client.userprofile.math(key, "+",newcoins, "coins");
+        //triggers on new users
+        client.userprofile.ensure(key, {
+            user: message.author.id,
+            guild: message.guild.id,
+            points: 10,
+            level: 1,
+            coins: 500,
+            warnlevel: 0,
+            bgcolor: '#f2f2f2',
+            maincolor: '#BAF0BA',
+            txtcolor: '#23272A',
+            title: 'This is a Title',
+            info: 'This is some text to act as my own personal status/info/about me. Whatever. Good news! It wraps text on its own.',
+            headerimg: 'https://pbs.twimg.com/media/CkCp_VhWYAAJcrU.jpg',
+            lastSeen: new Date()
+        });
+        //client.userprofile.inc(key, "points");
+        //var newpoints=0;
+        const newcoins = Math.floor(Math.random() * 7) + 8;
+        client.userprofile.math(key, "+", newcoins, "coins");
 
-		  if(ac.length === 0){
-			 const newpoints = Math.floor(Math.random()*7)+ 15;
-			 client.userprofile.math(key, "+",newpoints, "points");
+        if (ac.length === 0) {
+            const newpoints = Math.floor(Math.random() * 7) + 15;
+            client.userprofile.math(key, "+", newpoints, "points");
 
-			 // Calculate the user's current level
-			 const curLevel = Math.floor(0.1 * Math.sqrt(client.userprofile.get(key, "points")))+1;
-    
-			 // Act upon level up by sending a message and updating the user's level in enmap.
-			 if (client.userprofile.get(key, "level") < curLevel) {
-			   let lvlID = config.emojis.lvlup;
-			   message.reply(`${lvlID}**Congrats!** You've leveled up to **Level ${curLevel}**! Keep going!`);
-			   client.userprofile.math(key, "+",200, "coins");
-			   client.userprofile.set(key, curLevel, "level");
-			 }
-   
-			 //checks to see if level is at needed one fornew rank
-			 if(curLevel == 5 ){
-			   let addrankup = message.member;
-			   let roleName = 'lvl 5'
-			   let role = message.guild.roles.find(x => x.name == roleName);
-			   if(!role) {
-				   message.guild.createRole({
-					   name: roleName
-				   });
-			   }
-			   let lvlRole = message.guild.roles.find(x => x.name == roleName);
-			   if(message.member.roles.has(lvlRole.id)){
-				//do nothing
-			}
-			else{
-				message.channel.send("**Congrats!** You've received a new role!**");
-				addrankup.addRole(lvlRole.id).catch(console.error);
-			}
-			 }
-		  }//end of ac.length
-		  
-		  else{
-			for(i=0;i<count;i++){
-				//console.log(ac[i].name)
-				var name = ac[i].name;
-				if(message.channel.name === name){
-					const newpoints = Math.floor(Math.random()*7)+ 15;
-			 		client.userprofile.math(key, "+",newpoints, "points");
-				}
-			}//end of for loop
+            // Calculate the user's current level
+            const curLevel = Math.floor(0.1 * Math.sqrt(client.userprofile.get(key, "points"))) + 1;
 
-			 // Calculate the user's current level
-			 const curLevel = Math.floor(0.1 * Math.sqrt(client.userprofile.get(key, "points")))+1;
-    
-			 // Act upon level up by sending a message and updating the user's level in enmap.
-			 if (client.userprofile.get(key, "level") < curLevel) {
-			   let lvlID = config.emojis.lvlup;
-			   message.reply(`${lvlID}**Congrats!** You've leveled up to **Level ${curLevel}**! Keep going!`);
-			   client.userprofile.math(key, "+",200, "coins");
-			   client.userprofile.set(key, curLevel, "level");
-			 }
+            // Act upon level up by sending a message and updating the user's level in enmap.
+            if (client.userprofile.get(key, "level") < curLevel) {
+                let lvlID = config.emojis.lvlup;
+                message.reply(`${lvlID}**Congrats!** You've leveled up to **Level ${curLevel}**! Keep going!`);
+                client.userprofile.math(key, "+", 200, "coins");
+                client.userprofile.set(key, curLevel, "level");
+            }
 
-			for(i=0;i<count2;i++){
-				//console.log(ac[i].name)
-				//console.log(lvls[i].level)
-				var level = lvls[i].level;
-				var lvlName = lvls[i].rolename;
-				if(curLevel == level){
-					let addrankup = message.member;
-					let roleName = `${lvlName}`
-					
-					let role = message.guild.roles.find(x => x.name == roleName);
-					if(!role) {
-						message.guild.createRole({
-							name: roleName
-						});
-					}
-					let lvlRole = message.guild.roles.find(x => x.name == roleName);
-					if(message.member.roles.has(lvlRole.id)){
-						//do nothing
-					}
-					else{
-						message.channel.send("**Congrats!** You've received a new role!**");
-						addrankup.addRole(lvlRole.id).catch(console.error);
-					}
-					
-				}
-			}//end of for loop
-		  }
-		  
+            //checks to see if level is at needed one fornew rank
+            if (curLevel == 5) {
+                let addrankup = message.member;
+                let roleName = 'lvl 5'
+                let role = message.guild.roles.find(x => x.name == roleName);
+                if (!role) {
+                    message.guild.createRole({
+                        name: roleName
+                    });
+                }
+                let lvlRole = message.guild.roles.find(x => x.name == roleName);
+                if (message.member.roles.has(lvlRole.id)) {
+                    //do nothing
+                }
+                else {
+                    message.channel.send("**Congrats!** You've received a new role!**");
+                    addrankup.addRole(lvlRole.id).catch(console.error);
+                }
+            }
+        }//end of ac.length
 
-		  
-	}
+        else {
+            for (i = 0; i < count; i++) {
+                //console.log(ac[i].name)
+                var name = ac[i].name;
+                if (message.channel.name === name) {
+                    const newpoints = Math.floor(Math.random() * 7) + 15;
+                    client.userprofile.math(key, "+", newpoints, "points");
+                }
+            }//end of for loop
+
+            // Calculate the user's current level
+            const curLevel = Math.floor(0.1 * Math.sqrt(client.userprofile.get(key, "points"))) + 1;
+
+            // Act upon level up by sending a message and updating the user's level in enmap.
+            if (client.userprofile.get(key, "level") < curLevel) {
+                let lvlID = config.emojis.lvlup;
+                message.reply(`${lvlID}**Congrats!** You've leveled up to **Level ${curLevel}**! Keep going!`);
+                client.userprofile.math(key, "+", 200, "coins");
+                client.userprofile.set(key, curLevel, "level");
+            }
+
+            for (i = 0; i < count2; i++) {
+                //console.log(ac[i].name)
+                //console.log(lvls[i].level)
+                var level = lvls[i].level;
+                var lvlName = lvls[i].rolename;
+                if (curLevel == level) {
+                    let addrankup = message.member;
+                    let roleName = `${lvlName}`
+
+                    let role = message.guild.roles.find(x => x.name == roleName);
+                    if (!role) {
+                        message.guild.createRole({
+                            name: roleName
+                        });
+                    }
+                    let lvlRole = message.guild.roles.find(x => x.name == roleName);
+                    if (message.member.roles.has(lvlRole.id)) {
+                        //do nothing
+                    }
+                    else {
+                        message.channel.send("**Congrats!** You've received a new role!**");
+                        addrankup.addRole(lvlRole.id).catch(console.error);
+                    }
+
+                }
+            }//end of for loop
+        }
+
+
+
+    }
 
 	/******************
 	 * end of enmap xp
 	 ******************/
 
-	const args = message.content.slice(config.settings.prefix.length).split(' ');
-	//const args = message.content.slice(config.settings.prefix.length).split(/ +/);
-	const commandName = args.shift().toLowerCase();
+    const args = message.content.slice(config.settings.prefix.length).split(' ');
+    //const args = message.content.slice(config.settings.prefix.length).split(/ +/);
+    const commandName = args.shift().toLowerCase();
 
     //checks for the command within the collection
-	//if (!client.commands.has(commandName)) return;
-   const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
-	//const command = client.commands.get(commandName);	
-   if (!command) return;
+    //if (!client.commands.has(commandName)) return;
+    const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+    //const command = client.commands.get(commandName);	
+    if (!command) return;
 
-	//checks to make sure this isn't within a DM
-	if (command.guildOnly && message.channel.type !== 'text') {
-		return message.reply('I can\'t execute that command inside DMs!');
-	}
+    //checks to make sure this isn't within a DM
+    if (command.guildOnly && message.channel.type !== 'text') {
+        return message.reply('I can\'t execute that command inside DMs!');
+    }
     //checks for command args
     if (command.args && !args.length) {
-		let noID = config.emojis.no;
-		let reply = `${noID} | You didn't provide any arguments, ${message.author}!`;
+        let noID = config.emojis.no;
+        let reply = `${noID} | You didn't provide any arguments, ${message.author}!`;
         if (command.usage) {
 
-        	reply += `\nThe proper usage would be: \`${command.usage}\``;
-		}
-		
-		message.channel.send(reply);
+            reply += `\nThe proper usage would be: \`${command.usage}\``;
+        }
+
+        message.channel.send(reply);
     }
 
     //cooldown check
     if (!cooldowns.has(command.name)) {
-		cooldowns.set(command.name, new Discord.Collection());
-	}
+        cooldowns.set(command.name, new Discord.Collection());
+    }
 
-	const now = Date.now();
-	const timestamps = cooldowns.get(command.name);
-	const cooldownAmount = (command.cooldown || 3) * 1000;
+    const now = Date.now();
+    const timestamps = cooldowns.get(command.name);
+    const cooldownAmount = (command.cooldown || 3) * 1000;
 
-	if (timestamps.has(message.author.id)) {
-		const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
+    if (timestamps.has(message.author.id)) {
+        const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
 
-		if (now < expirationTime) {
-			const timeLeft = (expirationTime - now) / 1000;
-			const hours = Math.floor(timeLeft / 3600);
-			const time = timeLeft - hours * 3600;
-			const minutes = Math.floor(time/60);
-			const seconds = time - minutes * 60;
+        if (now < expirationTime) {
+            const timeLeft = (expirationTime - now) / 1000;
+            const hours = Math.floor(timeLeft / 3600);
+            const time = timeLeft - hours * 3600;
+            const minutes = Math.floor(time / 60);
+            const seconds = time - minutes * 60;
 
-			return message.reply(`please wait ${hours} hour(s), ${minutes} minute(s), and ${seconds.toFixed(0)} second(s) before reusing the \`${command.name}\` command.`);
+            return message.reply(`please wait ${hours} hour(s), ${minutes} minute(s), and ${seconds.toFixed(0)} second(s) before reusing the \`${command.name}\` command.`);
 
-			//return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
-		}
-	}
+            //return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
+        }
+    }
 
-	timestamps.set(message.author.id, now);
-	setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+    timestamps.set(message.author.id, now);
+    setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
     try {
         command.execute(message, args);
@@ -338,12 +349,12 @@ exports.setGameStatus = function (/**String*/ game,/**boolean*/maintenanceChange
     let gameBeforeChanging = client.user.localPresence.game.name;
     //client.user.setGame(game);
     client.user.setActivity(game, { type: 'PLAYING' })
-    .then(presence => console.log(`Activity set to ${presence.game ? presence.game.name : 'none'}`))
-    .catch(console.error);
+        .then(presence => console.log(`Activity set to ${presence.game ? presence.game.name : 'none'}`))
+        .catch(console.error);
 
     console.log("\n>> Bot Change > Game status set to: " + game);
 
-    if(maintenanceChange === false) {
+    if (maintenanceChange === false) {
 
         fs.readFile("./botData.json", "utf-8", function (err, data) {
             if (err) throw err;
@@ -356,12 +367,12 @@ exports.setGameStatus = function (/**String*/ game,/**boolean*/maintenanceChange
                 console.log(chalk.greenBright(">> Successfully edited botData.json. Followed values were changed in botData.json:"));
                 console.log(chalk.yellowBright(">> game: ") + chalk.redBright(gameBeforeChanging) + " -> " + chalk.greenBright.bold(game));
 
-                setTimeout(() =>{
+                setTimeout(() => {
                     app.addLog({
-                        "log_type" : "info",
-                        "log_message" : "Successfully edited botData.json.",
-                        "log_date" : Date.now(),
-                        "log_action" : "Changed value: game"
+                        "log_type": "info",
+                        "log_message": "Successfully edited botData.json.",
+                        "log_date": Date.now(),
+                        "log_action": "Changed value: game"
                     });
                 }, 50);
 
@@ -369,20 +380,20 @@ exports.setGameStatus = function (/**String*/ game,/**boolean*/maintenanceChange
         });
 
         let t1 = now();
-        setTimeout(() =>{
+        setTimeout(() => {
             app.addLog({
-                "log_type" : "info",
-                "log_message" : "Changed game status value",
-                "log_date" : Date.now(),
-                "log_action" : "function call took " + (t1-t0).toFixed(3) + "ms"
+                "log_type": "info",
+                "log_message": "Changed game status value",
+                "log_date": Date.now(),
+                "log_action": "function call took " + (t1 - t0).toFixed(3) + "ms"
             });
         }, 70);
-        setTimeout(() =>{
+        setTimeout(() => {
             app.addLog({
-                "log_type" : "success",
-                "log_message" : "Successfully changed game status of bot.",
-                "log_date" : Date.now(),
-                "log_action" : "Changed it from " + gameBeforeChanging + " to " + game + "."
+                "log_type": "success",
+                "log_message": "Successfully changed game status of bot.",
+                "log_date": Date.now(),
+                "log_action": "Changed it from " + gameBeforeChanging + " to " + game + "."
             });
         }, 90);
 
@@ -404,14 +415,14 @@ exports.setBotStatus = function (/**String*/ status,/**boolean*/maintenanceChang
     // Store status in a let before the change
     let statusBeforeChanging = client.user.localPresence.status;
 
-    if(status != "online" && status != "idle" && status != "invisible" && status != "dnd" ){
+    if (status != "online" && status != "idle" && status != "invisible" && status != "dnd") {
         console.error("\n>> Bot Error: Invalid status to set! Use only the 4 vaild ones!" +
             "\n>> PresenceStatus: https://discord.js.org/#/docs/main/stable/typedef/PresenceStatus" +
             "\n>> Sent value: " + status);
-    }else{
-        
+    } else {
 
-        if(maintenanceChange === false) {
+
+        if (maintenanceChange === false) {
             // Change value in botData.json
             fs.readFile('./botData.json', "utf-8", function (err, data) {
                 if (err) throw err;
@@ -467,10 +478,10 @@ exports.sendAdminMessage = function (/**String*/ message) {
 exports.sendClientObject = (/**Number*/t0) => {
     let t1 = now();
     app.addLog({
-        "log_type" : "info",
-        "log_message" : "Output the client object",
-        "log_date" : Date.now(),
-        "log_action" : "function call took " + (t1-t0).toFixed(3) + "ms"
+        "log_type": "info",
+        "log_message": "Output the client object",
+        "log_date": Date.now(),
+        "log_action": "function call took " + (t1 - t0).toFixed(3) + "ms"
     });
     return client;
 };
@@ -489,10 +500,10 @@ exports.sendGuildsObject = (/**Number*/t0) => {
     // })
     let t1 = now();
     app.addLog({
-        "log_type" : "info",
-        "log_message" : "Output the guilds (client.guilds) object",
-        "log_date" : Date.now(),
-        "log_action" : "function call took " + (t1-t0).toFixed(3) + "ms"
+        "log_type": "info",
+        "log_message": "Output the guilds (client.guilds) object",
+        "log_date": Date.now(),
+        "log_action": "function call took " + (t1 - t0).toFixed(3) + "ms"
     });
     return guilds;
 };
@@ -509,7 +520,7 @@ exports.sendInvitesOfServers = function () {
     guilds.map(function (a) {
         a.fetchInvites().then((invites) => {
             invites.map(function (b) {
-                if(b.maxAge === 0){
+                if (b.maxAge === 0) {
                     console.log(b)
                 }
             });
@@ -528,158 +539,135 @@ exports.sendInvitesOfServers = function () {
  * @public
  */
 exports.maintenance = function (/**boolean*/ maintenanceBool, /**Number*/t0) {
-    if(maintenanceBool === true){
+    if (maintenanceBool === true) {
         // localPresence values before the maintenance starts
         this.sendAdminMessage("Hello dear server admin. I´m currently in maintenance mode. We will inform you when we finished our maintenance!");
-        let statusBeforeChanging  = client.user.localPresence.status;
-        let gameBeforeChanging    = client.user.localPresence.game.name;
+        let statusBeforeChanging = client.user.localPresence.status;
+        let gameBeforeChanging = client.user.localPresence.game.name;
 
         // Set new values to the bot user
-        this.setBotStatus("dnd", true);
-        this.setGameStatus("Monkeys are working!", true);
-       //client.fetchUser('252638038650257429').then(user => {user.send("Hello I dmed you!")})
-    
-        //this.users.get('252638038650257429').message("hello")
-      
-         /* 
+        client.user.setPresence({ game: { name: 'Monkeys are working' }, status: 'dnd' })
+            .then(console.log)
+            .catch(console.error);
 
-         //issue has something to do with the adding to log
-        app.addLog({
-            "log_type" : "info",
-            "log_message" : "Server admins got an message which contains information that maintenance was enabled!",
-            "log_date" : Date.now(),
-            "log_action" : ""
+        logger.log({
+            level: 'info',
+            message: 'Server admins got an message which contains information that maintenance was enabled!',
+            action: ''
         });
 
-        
-        setTimeout(function(){
-            app.addLog({
-                "log_type" : "info",
-                "log_message" : "Values of bot client changed!",
-                "log_date" : Date.now(),
-                "log_action" : "Changed values: client.user.localPresence.status , client.user.localPresence.game.name"
-            });
-        }, 60);
-
-        // Reading the file and replace property values to new ones
-
-        fs.readFile("./botData.json", "utf-8", function (err, data) {
-            if (err) throw err;
-            let botData = JSON.parse(data);
-
-            // Setting new values for properties.
-
-            botData.maintenance = true;
-            botData.bot_game = "Monkeys are working!";
-            botData.bot_status = "dnd";
-
-            // Writing new property values into botData.json
-
-            fs.writeFile('./botData.json', JSON.stringify(botData, null, 3), 'utf-8', function(err) {
-                if (err) throw err;
-
-                // Output the changes
-
-                console.log(chalk.greenBright(">> Successfully edited botData.json. Followed values were changed in botData.json:"));
-                console.log(chalk.yellowBright(">> maintenance: ") + chalk.redBright("false") + " -> " + chalk.greenBright.bold("true"));
-                console.log(chalk.yellowBright(">> status: ") + chalk.redBright(statusBeforeChanging) + " -> " + chalk.greenBright.bold("dnd"));
-                console.log(chalk.yellowBright(">> bot_game: ") + chalk.redBright(gameBeforeChanging) + " -> " + chalk.greenBright.bold("Monkeys are working!"));
-                setTimeout(function() {
-                    app.addLog({
-                        "log_type": "info",
-                        "log_message": "Values in botData.json changed!",
-                        "log_date": Date.now(),
-                        "log_action": "Changed property values: maintenance, status, bot_game"
-                    });
-                }, 80)
-
-            })
+        logger.log({
+            level: 'info',
+            message: 'Values of bot client changed!',
+            action: 'Changed values: client.user.localPresence.status , client.user.localPresence.game.name'
         });
 
-        // Output the notification
 
-        // I added a timeout cause when I call this function too many times, it cause an error or it doesn´t add all lob entries.
-        // Maybe there is an solution but currently I didn´t found one.
+        logger.log({
+            level: 'info',
+            message: 'Values in botData.json changed!',
+            action: 'Changed property values: maintenance, status, bot_game'
+        });
+
+
         let t1 = now();
-        setTimeout(function() {
-            app.addLog({
-                "log_type": "maintenance",
-                "log_message": "Maintenance was enabled!",
-                "log_date": Date.now(),
-                "log_action": "Enabling maintenance took " + (t1 - t0).toFixed(3) + "ms"
-            });
-        }, 100);
+        logger.log({
+            level: 'maintenance',
+            message: 'Maintenance was enabled!',
+            action: 'Enabling maintenance took ' + (t1 - t0).toFixed(3) + 'ms'
+        });
 
         console.log("\n>> Bot > Maintenance are now " + chalk.redBright.bold("enabled!"));
         console.log(">> Bot > Notification Message was sent to server admins.");
 
-
-
-    }else{
-        // localPresence values before the maintenance ends
-        let statusBeforeChanging  = client.user.localPresence.status;
-        let gameBeforeChanging    = client.user.localPresence.game.name;
-
-        // Set new values to the bot user
-        this.setBotStatus("online", true);
-        this.setGameStatus("Monkeys are finished!", true);
-
-        setTimeout(function(){
-            app.addLog({
-                "log_type" : "info",
-                "log_message" : "Values of bot client changed!",
-                "log_date" : Date.now(),
-                "log_action" : "Changed values: client.user.localPresence.status , client.user.localPresence.game.name"
-            });
-        }, 60);
+        console.log(chalk.greenBright(">> Successfully edited botData.json. Followed values were changed in botData.json:"));
+        console.log(chalk.yellowBright(">> maintenance: ") + chalk.redBright("false") + " -> " + chalk.greenBright.bold("true"));
+        console.log(chalk.yellowBright(">> status: ") + chalk.redBright(statusBeforeChanging) + " -> " + chalk.greenBright.bold("dnd"));
+        console.log(chalk.yellowBright(">> bot_game: ") + chalk.redBright(gameBeforeChanging) + " -> " + chalk.greenBright.bold("Monkeys are working!"));
 
         // Reading the file and replace property values to new ones
-        fs.readFile("./botData.json", "utf-8", function (err, data) {
-            if (err) throw err;
-            let botData = JSON.parse(data);
+        setTimeout(function () { startMaintenance(); }, 1000);
 
-            // Setting new values for properties.
 
-            botData.maintenance = false;
-            botData.bot_game = "Monkeys are finished!";
-            botData.bot_status = "online";
+    } else {
+        // localPresence values before the maintenance ends
+        this.sendAdminMessage("Hello dear server admin. I´m officially out of maintenance mode. Cheers!");
+        let statusBeforeChanging = client.user.localPresence.status;
+        let gameBeforeChanging = client.user.localPresence.game.name;
 
-            // Writing new property values into botData.json
+        // Set new values to the bot user
+        client.user.setPresence({ game: { name: 'Monkeys are finished!' }, status: 'online' })
+            .then(console.log)
+            .catch(console.error);
 
-            fs.writeFile('./botData.json', JSON.stringify(botData, null, 3), 'utf-8', function(err) {
-                if (err) throw err;
+        logger.log({
+            level: 'info',
+            message: 'Server admins got an message which contains information that maintenance was enabled!',
+            action: ''
+        });
 
-                // Output the changes in the files
+        logger.log({
+            level: 'info',
+            message: 'Values of bot client changed!',
+            action: 'Changed values: client.user.localPresence.status , client.user.localPresence.game.name'
+        });
 
-                console.log(chalk.greenBright(">> Successfully edited botData.json. Followed values were changed in botData.json:"));
-                console.log(chalk.yellowBright(">> maintenance: ") + chalk.redBright("true") + " -> " + chalk.greenBright.bold("false"));
-                console.log(chalk.yellowBright(">> status: ") + chalk.redBright(statusBeforeChanging) + " -> " + chalk.greenBright.bold("online"));
-                console.log(chalk.yellowBright(">> bot_game: ") + chalk.redBright(gameBeforeChanging) + " -> " + chalk.greenBright.bold("Monkeys are finished!"));
-                setTimeout(function() {
-                    app.addLog({
-                        "log_type": "info",
-                        "log_message": "Values in botData.json changed!",
-                        "log_date": Date.now(),
-                        "log_action": "Changed property values: maintenance, status, bot_game"
-                    });
-                }, 80);
-            })
+
+        logger.log({
+            level: 'info',
+            message: 'Values in botData.json changed!',
+            action: 'Changed property values: maintenance, status, bot_game'
+        });
+
+        let t1 = now();
+        logger.log({
+            level: 'maintenance',
+            message: 'Maintenance was disabled!',
+            action: 'Disabling maintenance took ' + (t1 - t0).toFixed(3) + 'ms'
         });
 
         // Output the notification
-
         console.log("\n>> Bot > Maintenance are now " + chalk.greenBright.bold("disabled!"));
+        console.log(chalk.greenBright(">> Successfully edited botData.json. Followed values were changed in botData.json:"));
+        console.log(chalk.yellowBright(">> maintenance: ") + chalk.redBright("true") + " -> " + chalk.greenBright.bold("false"));
+        console.log(chalk.yellowBright(">> status: ") + chalk.redBright(statusBeforeChanging) + " -> " + chalk.greenBright.bold("online"));
+        console.log(chalk.yellowBright(">> bot_game: ") + chalk.redBright(gameBeforeChanging) + " -> " + chalk.greenBright.bold("Monkeys are finished!"));
+        // Reading the file and replace property values to new ones   
 
-        let t1 = now();
-        setTimeout(function() {
-            app.addLog({
-                "log_type": "maintenance",
-                "log_message": "Maintenance was disabled!",
-                "log_date": Date.now(),
-                "log_action": "Disabling maintenance took " + (t1 - t0).toFixed(3) + "ms"
-            });
-        }, 100)
-        */
+        setTimeout(function () { stopMaintenance(); }, 1000);
     }
 };
 
+function startMaintenance() {
+    var fs = require('fs');
+    fs.readFile('./botData.json', 'utf8', function (err, data) {
+        if (err) {
+            return console.log(err);
+        }
+
+        data = data.replace(botconfig.maintenance, true);
+        data = data.replace(botconfig.bot_game, 'Monkeys are working');
+        data = data.replace(botconfig.bot_status, 'dnd');
+
+        fs.writeFile('./botData.json', data, 'utf8', function (err) {
+            if (err) return console.log(err);
+        });
+    });
+}
+
+function stopMaintenance() {
+    var fs = require('fs');
+    fs.readFile('./botData.json', 'utf8', function (err, data) {
+        if (err) {
+            return console.log(err);
+        }
+
+        data = data.replace(botconfig.maintenance, false);
+        data = data.replace(botconfig.bot_game, 'Monkeys are finished!');
+        data = data.replace(botconfig.bot_status, 'online');
+
+        fs.writeFile('./botData.json', data, 'utf8', function (err) {
+            if (err) return console.log(err);
+        });
+    });
+}
