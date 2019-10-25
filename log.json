@@ -70,5 +70,59 @@
       "log_message": "Maintenance was disabled!",
       "log_date": 1571862469084,
       "log_action": "Disabling maintenance took 12.528ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Changed game status value",
+      "log_date": 1572033225017,
+      "log_action": "function call took 2.672ms"
+   },
+   {
+      "log_type": "success",
+      "log_message": "Successfully changed game status of bot.",
+      "log_date": 1572033225039,
+      "log_action": "Changed it from Monkeys are finished! to test."
+   },
+   {
+      "log_type": "info",
+      "log_message": "Successfully edited botData.json.",
+      "log_date": 1572033225047,
+      "log_action": "Changed value: game"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Changed game status value",
+      "log_date": 1572033945396,
+      "log_action": "function call took 1.941ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Successfully edited botData.json.",
+      "log_date": 1572033945399,
+      "log_action": "Changed value: game"
+   },
+   {
+      "log_type": "success",
+      "log_message": "Successfully changed game status of bot.",
+      "log_date": 1572033945417,
+      "log_action": "Changed it from Monkeys are finished! to test."
+   },
+   {
+      "log_type": "info",
+      "log_message": "Changed game status value",
+      "log_date": 1572033959807,
+      "log_action": "function call took 2.027ms"
+   },
+   {
+      "log_type": "success",
+      "log_message": "Successfully changed game status of bot.",
+      "log_date": 1572033959813,
+      "log_action": "Changed it from test to !help."
+   },
+   {
+      "log_type": "info",
+      "log_message": "Successfully edited botData.json.",
+      "log_date": 1572033959818,
+      "log_action": "Changed value: game"
    }
 ]

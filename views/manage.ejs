@@ -19,6 +19,63 @@
         <h1><b>Dashboard</b></h1>
         <hr>
 
+        <div class="card-columns">
+            <div class="card border-primary mb-3" style="max-width: 20rem;">
+                <div class="card-body text-center">
+                    <p class="card-text">
+                        <h4><b>Game Activity Status</b><br><small>Change the playing game activity of your bot.</small>
+                        </h4>
+                        <form method="post" class="changeGame" action="/change-game-status" class="form-inline">
+                            <div class="input-group mb-3">
+                                <input class="form-control" type="text" name="gameStatus" id="gameChangeInput">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-primary">Save Game Status</button>
+                                </div>
+                            </div>
+                        </form>
+                    </p>
+                </div>
+            </div>
+            <div class="card border-success mb-3"style="max-width: 20rem;">
+                <div class="card-header"><h4>Welcome Message</h4></div>
+                    <div class="card-body text-center">
+                        <p class="card-text">
+                            Current<h4><small><%= welcome %></small></h4>
+                            <form method="post" class="changeWelcome" action="/change-welcome" class="form-inline">
+                                <div class="input-group mb-3">
+                                    <textarea class="form-control" name="welcome" id="welcomeInput"rows="3"></textarea>
+                                    <div class="input-group">
+                                        <button type="submit" class="btn btn-primary">Save Game Status</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </p>
+                    </div>
+                </div>
+            <div class="card bg-success">
+                <div class="card-body text-center">
+                    <p class="card-text">Some text inside the third card</p>
+                </div>
+            </div>
+            <div class="card bg-danger">
+                <div class="card-body text-center">
+                    <p class="card-text">Some text inside the fourth card</p>
+                </div>
+            </div>
+            <div class="card bg-light">
+                <div class="card-body text-center">
+                    <p class="card-text">Some text inside the fifth card</p>
+                </div>
+            </div>
+            <div class="card bg-info">
+                <div class="card-body text-center">
+                    <p class="card-text">Some text inside the sixth card</p>
+                </div>
+            </div>
+        </div>
+
+
+
         <div class="card border-success mb-3">
             <div class="card-header">
                 <h5 class="card-title">Bot Status</h5>
@@ -104,7 +161,7 @@
 
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="../scripts/dashboard.js"></script>
+    <script src="../src/dashboard.js"></script>
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 </body>
 

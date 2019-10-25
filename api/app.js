@@ -78,6 +78,7 @@ exports.startApp = function (/**Object*/ client) {
     app.set('log', log);
     app.set('prefix', config.settings.prefix);
     app.set('commands', commands);
+    app.set('welcome', config.settings.welcome);
     
     app.use(session({
         secret: 'ssshhhhh',
@@ -85,7 +86,7 @@ exports.startApp = function (/**Object*/ client) {
         saveUninitialized: false,
     }));
 
-    require ('./router')(app);
+   
 
     
     app.use(passport.initialize());
@@ -96,6 +97,8 @@ exports.startApp = function (/**Object*/ client) {
     app.use(bodyParser.urlencoded({
         extended: true
     }));
+
+    require ('./router')(app);
 
     function checkAuth(req, res, next) {
         if (req.isAuthenticated()) return next();
@@ -206,8 +209,8 @@ app.get('/commands', function(req, res) {
     });
 
     // ---- POST
-/*
-    app.post("/change-game-status" ,(req, res) => {
+
+    /*app.post("/change-game-status" ,(req, res) => {
 
         // Using the exports function from the required "./main" module to set the game
         bot.setGameStatus(req.body.gameStatus, false, now());
@@ -229,8 +232,8 @@ app.get('/commands', function(req, res) {
         //res.redirect("/");
         console.log("\n>> Redirecting to /");
         res.redirect('back');
-    });
-
+    });*/
+/*
     app.post("/change-status", (req, res) => {
         console.log(`Status changing too from webpage: ` +req.body.status)
        // var botStatus = botData.bot_status;
