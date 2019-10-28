@@ -8,7 +8,7 @@ module.exports = (app) => {
     app.use('/messages', require('./routes/messages'));
     app.use('/log', require('./routes/log'));
     app.use('/manage', require('./routes/manage'));
-   
+   app.use('/commands', require('./routes/commands'));
 
     //function routes/
     app.use('/outputClient', require('./routes/functions/outputclient'));

@@ -10,11 +10,11 @@ router.get("/", (req, res, next) => {
     var prefix = req.app.get('prefix');
     var welcome = req.app.get('welcome');
     var commands = req.app.get('commands');
-
+    var server = req.app.get('server');
 
     res.render("manage", {
         data: client, maintenanceStatus: maintenanceStatus, botData: botData, member: member,
-         commands: commands, prefix: prefix, log: log, welcome: welcome
+         commands: commands, prefix: prefix, log: log, welcome: welcome, server: server
     });
 });
 module.exports = router;

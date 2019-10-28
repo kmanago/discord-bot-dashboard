@@ -124,5 +124,35 @@
       "log_message": "Successfully edited botData.json.",
       "log_date": 1572033959818,
       "log_action": "Changed value: game"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Changed game status value",
+      "log_date": 1572291136526,
+      "log_action": "function call took 1.493ms"
+   },
+   {
+      "log_type": "success",
+      "log_message": "Successfully changed game status of bot.",
+      "log_date": 1572291136544,
+      "log_action": "Changed it from !help to test."
+   },
+   {
+      "log_type": "info",
+      "log_message": "Changed game status value",
+      "log_date": 1572291191749,
+      "log_action": "function call took 1.534ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Successfully edited botData.json.",
+      "log_date": 1572291191755,
+      "log_action": "Changed value: game"
+   },
+   {
+      "log_type": "success",
+      "log_message": "Successfully changed game status of bot.",
+      "log_date": 1572291191769,
+      "log_action": "Changed it from test to !help."
    }
 ]

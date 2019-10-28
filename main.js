@@ -322,6 +322,52 @@ client.on('message', message => {
 // Logging in Discord Bot at the API
 client.login(config.token);
 
+
+/**
+ * Set a game status for the bot.
+ *
+ * @param prefix - Prefix to be set for the bot.
+ * @since 0.0.1
+ *
+ * @public
+ */
+exports.setPrefix = function (/**String*/ prefix) {
+
+    // Short explanation why I´m using this boolean maintenanceChange
+    // Currently we´re saving all data from the bot into the file botData.json
+    // When I´m saving the new values which are sent by the maintenance function like the new game status
+    // it will, without the boolean maintenanceChange, execute the fs.readFile function which produce
+    // issues in the botData.json like some typos and other mistakes.
+    // So this is the reason why I use this boolean.
+
+    // When you want to publish your bot for real usage, you can use this file or creating a database
+    // which you must implement here.
+
+    // You have another idea how to store this values? Then make a Pull Request in GitHub! :)
+
+    let oldPrefix = config.settings.prefix;
+    const settings = config.settings;
+    //client.user.setGame(game);
+    
+    console.log("\n>> Bot Change > Prefix set to: " + prefix);
+
+    var fs = require('fs')
+    fs.readFile('./config.json', 'utf8', function (err,data) {
+        if (err) {
+            return console.log(err);
+        }
+        var result = data.replace(settings.prefix, prefix);
+
+        fs.writeFile('\config.json', result, 'utf8', function (err) {
+            if (err) return console.log(err);
+        });
+        console.log(chalk.greenBright(">> Successfully edited config.json. Followed values were changed in config.json:"));
+        console.log(chalk.yellowBright(">> prefix: ") + chalk.redBright(oldPrefix) + " -> " + chalk.greenBright.bold(prefix));
+    });
+};
+
+
+
 /**
  * Set a game status for the bot.
  *

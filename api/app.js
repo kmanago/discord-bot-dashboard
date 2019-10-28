@@ -79,7 +79,11 @@ exports.startApp = function (/**Object*/ client) {
     app.set('prefix', config.settings.prefix);
     app.set('commands', commands);
     app.set('welcome', config.settings.welcome);
-    
+    app.set('Discord', Discord);
+
+    let server = client.guilds.find(val => val.id === '252638472269987840');
+    app.set('server', server);
+
     app.use(session({
         secret: 'ssshhhhh',
         resave: false,
@@ -159,10 +163,15 @@ app.get('/dashboard', checkAuth, function(req, res) {
     var member = req.user;
     res.render('dashboard', {data: client, maintenanceStatus: maintenanceStatus, member: req.user });
 });
-*/
+
 
 app.get('/commands', function(req, res) {
     const perms = Discord.EvaluatedPermissions;
+    res.render('commands', {data: client, maintenanceStatus: maintenanceStatus, member: req.user, perms: perms });
+});*/
+
+app.get('/roles', function(req, res) {
+
     res.render('commands', {data: client, maintenanceStatus: maintenanceStatus, member: req.user, perms: perms });
 });
 
@@ -209,6 +218,13 @@ app.get('/commands', function(req, res) {
     });
 
     // ---- POST
+
+    app.post("/change-prefix", (req, res) => {
+       
+        bot.setPrefix(req.body.newPrefix);
+        console.log("\n>> Redirecting to manage");
+        res.redirect('back');
+    });
 
     /*app.post("/change-game-status" ,(req, res) => {
 
