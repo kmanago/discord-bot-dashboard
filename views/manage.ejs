@@ -19,6 +19,16 @@
         <h1><b>Dashboard for <%= server.name ;%></b></h1>
         <hr>
 
+        <div> <!--TODO: Show all-->
+            <% var m = server.members;
+            m.forEach(mem => {
+                if(mem.roles.some(r=> [adminRole, modRole].includes(r.name)) ){ 
+                    console.log(mem.user.username)
+                }
+            });
+            %>    
+        </div>
+
         <div class="card-columns">
             <div class="card border-primary mb-3">
                 <div class="card-body text-center">
@@ -94,6 +104,7 @@
                     <div class="col-sm-auto border-right">
                         <p class="card-text">
                             <p class="bot_username"><b>Name:</b> <%= data.user.username %></p>
+                            <p class="bot_username"><b>Prefix:</b> <%= prefix %></p>
                             <p class="bot_game"><b>Current game:</b> <%= data.user.localPresence.game.name %></p>
                             <span class="bot_status"><b>Status:</b>
                                 <% if(data.user.localPresence.status === "online"){ %>
@@ -106,7 +117,8 @@
                                 <div class="statusSymbol statusSymbolInvisible"></div> Invisible
                                 <% }%>
                             </span>
-                            <hr>
+                           
+                            <hr style="background:white">
                             <h4><b>Maintenance:</b></h4>
                             <!--<p class="warning"><b>Warning! &raquo; </b>This function is in a early status!</p>-->
                             <% if(maintenanceStatus == false){ %>
@@ -118,6 +130,14 @@
                             <a href="/deactivateMaintenance"><button style="width: 100%;"
                                     class="btn btn-success">Deactivate Maintenance</button></a>
                             <% } %>
+                            <hr style="background:white">
+                            <h4><b>Development:</b><br><small>Some test features.</small></h4><br>
+                                <a href="/outputClient"><button id="outputClientObjBtn" class="btn btn-secondary">Output
+                                        Client Object</button></a><br><br>
+                                <a href="/outputGuilds"><button id="outputClientObjBtn" class="btn btn-secondary">Output
+                                        Guilds Object</button></a><br><br>
+                                <a href="/testingNewFunction"><button id="testNewFunctionBtn" class="btn btn-info">Testing a
+                                        new function</button></a>
                         </p>
                     </div>
 
@@ -129,40 +149,22 @@
                             <br>
                             <div class="alert alert-secondary" role="alert"><%= welcome %></div>
                             <form method="post" class="changeWelcome" action="/change-welcome" class="form-inline">
-
                                 <textarea class="form-control" name="welcome" id="welcomeInput" rows="3"></textarea>
                                 <br>
                                 <button type="submit" class="btn btn-primary">Save Welcome</button>
-
-
                             </form>
 
-                            <hr>
-                            <h4><b>Change Status:</b><br><small>Change status of your bot.</small></h4>
-                            <form method="post" action="/change-status" class="form-inline">
-                                <div class="input-group mb-3">
-                                    <select class="form-control" name="status">
-                                        <option value="online">Online</option>
-                                        <option value="idle">Idle</option>
-                                        <option value="dnd">Do not Disturb</option>
-                                        <option value="invisible">Invisible</option>
-                                    </select>
-                                    <div class="input-group-append">
-                                        <button type="submit" class="btn btn-primary">
-                                            Change Status
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                            <hr>
-                            <h4><b>Development:</b><br><small>Here you can add some test features for your own project.
-                                    I added some functions which may be helpful for you!</small></h4>
-                            <a href="/outputClient"><button id="outputClientObjBtn" class="btn btn-secondary">Output
-                                    Client Object</button></a>
-                            <a href="/outputGuilds"><button id="outputClientObjBtn" class="btn btn-secondary">Output
-                                    Guilds Object</button></a>
-                            <a href="/testingNewFunction"><button id="testNewFunctionBtn" class="btn btn-info">Testing a
-                                    new function</button></a>
+                             <hr style="background:white">
+                             <h4><b>Goodbye Message:</b><br><small>Change the goodbye message of your bot here.</small>
+                             </h4>
+                             <br>Current Bot Message:
+                             <br>
+                             <div class="alert alert-secondary" role="alert"><%= goodbye %></div>
+                             <form method="post" class="changeGoodbye" action="/change-goodbye" class="form-inline">
+                                 <textarea class="form-control" name="welcome" id="goodbyeInput" rows="3"></textarea>
+                                 <br>
+                                 <button type="submit" class="btn btn-primary">Save Goodbye</button>
+                             </form>
                         </p>
                     </div>
 

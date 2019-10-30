@@ -323,8 +323,76 @@ client.on('message', message => {
 client.login(config.token);
 
 
+/**********
+ * 
+ * FUNCTIONS
+ * 
+ */
+
+ /**
+ * Set a greeting for the bot.
+ *
+ * @param greeting 
+ * @since 0.0.1
+ *
+ * @public
+ */
+exports.setWelcome = function (/**String*/ greeting) {
+    let oldGreet= config.settings.welcome;
+    const settings = config.settings;
+
+    console.log("\n>> Bot Change > Welcome Message set to: " + greeting);
+
+    var fs = require('fs')
+    fs.readFile('./config.json', 'utf8', function (err,data) {
+        if (err) {
+            return console.log(err);
+        }
+        var result = data.replace(settings.welcome, greeting);
+
+        fs.writeFile('\config.json', result, 'utf8', function (err) {
+            if (err) return console.log(err);
+        });
+        console.log(chalk.greenBright(">> Successfully edited config.json. Followed values were changed in config.json:"));
+        console.log(chalk.yellowBright(">> welcome: ") + chalk.redBright(oldGreet) + " -> " + chalk.greenBright.bold(greeting));
+    });
+};
+/**End of greeting function */
+
+
 /**
- * Set a game status for the bot.
+ * Set a greeting for the bot.
+ *
+ * @param leaving
+ * @since 0.0.1
+ *
+ * @public
+ */
+exports.setGoodbye = function (/**String*/ leaving) {
+    let oldGood= config.settings.welcome;
+    const settings = config.settings;
+
+    console.log("\n>> Bot Change > Goodbye Message set to: " + leaving);
+
+    var fs = require('fs')
+    fs.readFile('./config.json', 'utf8', function (err,data) {
+        if (err) {
+            return console.log(err);
+        }
+        var result = data.replace(settings.goodbye, leaving);
+
+        fs.writeFile('\config.json', result, 'utf8', function (err) {
+            if (err) return console.log(err);
+        });
+        console.log(chalk.greenBright(">> Successfully edited config.json. Followed values were changed in config.json:"));
+        console.log(chalk.yellowBright(">> goodbye: ") + chalk.redBright(oldGood) + " -> " + chalk.greenBright.bold(leaving));
+    });
+};
+/**End of greeting function */
+
+
+/**
+ * Set a PREFIX for the bot.
  *
  * @param prefix - Prefix to be set for the bot.
  * @since 0.0.1
@@ -332,23 +400,9 @@ client.login(config.token);
  * @public
  */
 exports.setPrefix = function (/**String*/ prefix) {
-
-    // Short explanation why I´m using this boolean maintenanceChange
-    // Currently we´re saving all data from the bot into the file botData.json
-    // When I´m saving the new values which are sent by the maintenance function like the new game status
-    // it will, without the boolean maintenanceChange, execute the fs.readFile function which produce
-    // issues in the botData.json like some typos and other mistakes.
-    // So this is the reason why I use this boolean.
-
-    // When you want to publish your bot for real usage, you can use this file or creating a database
-    // which you must implement here.
-
-    // You have another idea how to store this values? Then make a Pull Request in GitHub! :)
-
     let oldPrefix = config.settings.prefix;
     const settings = config.settings;
-    //client.user.setGame(game);
-    
+
     console.log("\n>> Bot Change > Prefix set to: " + prefix);
 
     var fs = require('fs')
@@ -365,7 +419,7 @@ exports.setPrefix = function (/**String*/ prefix) {
         console.log(chalk.yellowBright(">> prefix: ") + chalk.redBright(oldPrefix) + " -> " + chalk.greenBright.bold(prefix));
     });
 };
-
+/**End of Prefix function */
 
 
 /**
@@ -553,6 +607,7 @@ exports.sendGuildsObject = (/**Number*/t0) => {
     });
     return guilds;
 };
+
 /**
  * Outputs the invites of servers where the bot is connected. For production and development.
  *

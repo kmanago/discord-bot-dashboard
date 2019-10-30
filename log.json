@@ -154,5 +154,17 @@
       "log_message": "Successfully changed game status of bot.",
       "log_date": 1572291191769,
       "log_action": "Changed it from test to !help."
+   },
+   {
+      "log_type": "info",
+      "log_message": "Output the client object",
+      "log_date": 1572445082826,
+      "log_action": "function call took 0.303ms"
+   },
+   {
+      "log_type": "info",
+      "log_message": "Output the guilds (client.guilds) object",
+      "log_date": 1572445113874,
+      "log_action": "function call took 0.111ms"
    }
 ]

@@ -74,13 +74,17 @@ exports.startApp = function (/**Object*/ client) {
     app.set('client', client);
     app.set('botData', botData);
     app.set('bot', bot);
+
     app.set('maintenanceStatus', maintenanceStatus);
     app.set('log', log);
+
     app.set('prefix', config.settings.prefix);
     app.set('commands', commands);
     app.set('welcome', config.settings.welcome);
-    app.set('Discord', Discord);
+    app.set('adminRole', config.settings.adminRole);
+    app.set('modRole', config.settings.modRole);
 
+    app.set('Discord', Discord);
     let server = client.guilds.find(val => val.id === '252638472269987840');
     app.set('server', server);
 
@@ -172,7 +176,7 @@ app.get('/commands', function(req, res) {
 
 app.get('/roles', function(req, res) {
 
-    res.render('commands', {data: client, maintenanceStatus: maintenanceStatus, member: req.user, perms: perms });
+    res.render('commands', {data: client, maintenanceStatus: maintenanceStatus, member: req.user, perms: perms, server: server });
 });
 
 /*function checkAuth(req, res, next) {
@@ -222,6 +226,12 @@ app.get('/roles', function(req, res) {
     app.post("/change-prefix", (req, res) => {
        
         bot.setPrefix(req.body.newPrefix);
+        console.log("\n>> Redirecting to manage");
+        res.redirect('back');
+    });
+
+    app.post("/change-welcome", (req, res) => {
+        bot.setWelcome(req.body.welcome);
         console.log("\n>> Redirecting to manage");
         res.redirect('back');
     });

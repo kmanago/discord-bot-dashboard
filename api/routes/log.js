@@ -18,7 +18,12 @@ router.get("/", (req, res, next) => {
     var maintenanceStatus = req.app.get('maintenanceStatus');
     var botData = req.app.get('botData');
     var member = req.app.get('member');
-    var log = req.app.get('log')
-    res.render("log", {data: client, log: log, maintenanceStatus: maintenanceStatus, botData: botData, member: member});
+    var log = req.app.get('log');
+    var server = req.app.get('server');
+    var adminRole = req.app.get('adminRole');
+    var modRole = req.app.get('modRole');
+    
+    res.render("log", {data: client, log: log, maintenanceStatus: maintenanceStatus, botData: botData, member: member,
+        server: server, adminRole: adminRole, modRole:modRole});
 });
 module.exports = router;

@@ -9,12 +9,16 @@ router.get("/", (req, res, next) => {
     var log = req.app.get('log');
     var prefix = req.app.get('prefix');
     var welcome = req.app.get('welcome');
+    var goodbye = req.app.get('goodbye');
     var commands = req.app.get('commands');
     var server = req.app.get('server');
+    var adminRole = req.app.get('adminRole');
+    var modRole = req.app.get('modRole');
 
     res.render("manage", {
         data: client, maintenanceStatus: maintenanceStatus, botData: botData, member: member,
-         commands: commands, prefix: prefix, log: log, welcome: welcome, server: server
+         commands: commands, prefix: prefix, log: log, welcome: welcome, server: server,
+         goodbye: goodbye, adminRole: adminRole, modRole:modRole
     });
 });
 module.exports = router;
