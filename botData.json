@@ -4,6 +4,6 @@
    "statusNotificationText": "Change this text in the botData.json",
    "bot_version": "0.0.6.3",
    "bot_name": "SubiBot",
-   "bot_game": "!help",
+   "bot_game": "Monkeys are finished!",
    "bot_status": "online"
 }

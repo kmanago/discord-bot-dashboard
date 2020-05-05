@@ -15,18 +15,25 @@
     <%- include('./templates/nav'); %>
 
     <div class="container justify-content-center">
+        <div class=row style="margin-top:10px">
+            <div class="col-3">
+                <br>
+                <div class="page-header">
+                    <h1><b>Dashboard</b></h1>
+                </div>
+            </div>
+        </div>
+        <hr style="background:white">
 
-        <h1><b>Dashboard for <%= server.name ;%></b></h1>
-        <hr>
-
-        <div> <!--TODO: Show all-->
+        <div>
+            <!--TODO: Show all-->
             <% var m = server.members;
             m.forEach(mem => {
                 if(mem.roles.some(r=> [adminRole, modRole].includes(r.name)) ){ 
                     console.log(mem.user.username)
                 }
             });
-            %>    
+            %>
         </div>
 
         <div class="card-columns">
@@ -69,7 +76,7 @@
                         <form method="post" action="/change-status" class="form-inline">
                             <div class="input-group mb-3">
                                 <select class="custom-select" name="status">
-                                    <option selected="online">Online</option>
+                                    <option value="online">Online</option>
                                     <option value="idle">Idle</option>
                                     <option value="dnd">Do not Disturb</option>
                                     <option value="invisible">Invisible</option>
@@ -82,12 +89,6 @@
                             </div>
                         </form>
                     </p>
-                </div>
-            </div>
-
-            <div class="card bg-success">
-                <div class="card-body text-center">
-                    <p class="card-text">Some text inside the third card</p>
                 </div>
             </div>
 
@@ -117,7 +118,7 @@
                                 <div class="statusSymbol statusSymbolInvisible"></div> Invisible
                                 <% }%>
                             </span>
-                           
+
                             <hr style="background:white">
                             <h4><b>Maintenance:</b></h4>
                             <!--<p class="warning"><b>Warning! &raquo; </b>This function is in a early status!</p>-->
@@ -125,19 +126,19 @@
                             <button id="enableButtonForMaintanance" style="width: 100%;" class="btn btn-danger">Activate
                                 Maintenance</button><br class="brMaintenance"><br class="brMaintenance">
                             <a href="/activateMaintenance"><button style="width: 100%;" id="maintenanceActivatingButton"
-                                    disabled class="btn">Confirming Maintenance</button></a>
+                                    disabled class="btn btn-secondary">Confirming Maintenance</button></a>
                             <% }else{ %>
                             <a href="/deactivateMaintenance"><button style="width: 100%;"
                                     class="btn btn-success">Deactivate Maintenance</button></a>
                             <% } %>
                             <hr style="background:white">
                             <h4><b>Development:</b><br><small>Some test features.</small></h4><br>
-                                <a href="/outputClient"><button id="outputClientObjBtn" class="btn btn-secondary">Output
-                                        Client Object</button></a><br><br>
-                                <a href="/outputGuilds"><button id="outputClientObjBtn" class="btn btn-secondary">Output
-                                        Guilds Object</button></a><br><br>
-                                <a href="/testingNewFunction"><button id="testNewFunctionBtn" class="btn btn-info">Testing a
-                                        new function</button></a>
+                            <a href="/outputClient"><button id="outputClientObjBtn" class="btn btn-secondary">Output
+                                    Client Object</button></a><br><br>
+                            <a href="/outputGuilds"><button id="outputClientObjBtn" class="btn btn-secondary">Output
+                                    Guilds Object</button></a><br><br>
+                            <a href="/testingNewFunction"><button id="testNewFunctionBtn" class="btn btn-info">Testing a
+                                    new function</button></a>
                         </p>
                     </div>
 
@@ -154,17 +155,17 @@
                                 <button type="submit" class="btn btn-primary">Save Welcome</button>
                             </form>
 
-                             <hr style="background:white">
-                             <h4><b>Goodbye Message:</b><br><small>Change the goodbye message of your bot here.</small>
-                             </h4>
-                             <br>Current Bot Message:
-                             <br>
-                             <div class="alert alert-secondary" role="alert"><%= goodbye %></div>
-                             <form method="post" class="changeGoodbye" action="/change-goodbye" class="form-inline">
-                                 <textarea class="form-control" name="welcome" id="goodbyeInput" rows="3"></textarea>
-                                 <br>
-                                 <button type="submit" class="btn btn-primary">Save Goodbye</button>
-                             </form>
+                            <hr style="background:white">
+                            <h4><b>Goodbye Message:</b><br><small>Change the goodbye message of your bot here.</small>
+                            </h4>
+                            <br>Current Bot Message:
+                            <br>
+                            <div class="alert alert-secondary" role="alert"><%= goodbye %></div>
+                            <form method="post" class="changeGoodbye" action="/change-goodbye" class="form-inline">
+                                <textarea class="form-control" name="welcome" id="goodbyeInput" rows="3"></textarea>
+                                <br>
+                                <button type="submit" class="btn btn-primary">Save Goodbye</button>
+                            </form>
                         </p>
                     </div>
 

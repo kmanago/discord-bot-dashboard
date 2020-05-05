@@ -7,7 +7,6 @@ const log = require("../logs/logs.json");
 const fs = require("fs");
 const bodyParser = require('body-parser');
 const now = require("performance-now");
-const commands = require("./../discord-bot-sourcefiles/bot-commands.json");
 const Discord = require('discord.js');
 
 var passport = require('passport');
@@ -75,12 +74,20 @@ exports.startApp = function (/**Object*/ client) {
     app.set('botData', botData);
     app.set('bot', bot);
 
+    let devID = '252638038650257429';
+    let dev = client.users.get(devID);
+    app.set('dev', dev);
+
     app.set('maintenanceStatus', maintenanceStatus);
     app.set('log', log);
 
+    
     app.set('prefix', config.settings.prefix);
+    let commands = client.commands;
     app.set('commands', commands);
+
     app.set('welcome', config.settings.welcome);
+    app.set('goodbye', config.settings.goodbye);
     app.set('adminRole', config.settings.adminRole);
     app.set('modRole', config.settings.modRole);
 
@@ -150,7 +157,8 @@ exports.startApp = function (/**Object*/ client) {
     } else {
       res.redirect("/");
     }
-     app.set('member', req.user) } // auth success
+     app.set('member', req.user);
+    console.log(req.user) } // auth success
      
 );
 
@@ -161,6 +169,7 @@ app.get('/logout', function(req, res) {
         res.redirect("/"); //Inside a callback… bulletproof!
       });
 });
+
 
 /*
 app.get('/dashboard', checkAuth, function(req, res) {
@@ -178,6 +187,11 @@ app.get('/roles', function(req, res) {
 
     res.render('commands', {data: client, maintenanceStatus: maintenanceStatus, member: req.user, perms: perms, server: server });
 });
+
+app.get('/profile',checkAuth, function(req, res){
+    res.render("profile", {data: client, maintenanceStatus: maintenanceStatus, botData: botData, member: req.user,
+        server: server, adminRole: adminRole, modRole:modRole});
+    });
 
 /*function checkAuth(req, res, next) {
     if (req.isAuthenticated()) return next();
@@ -198,14 +212,10 @@ app.get('/roles', function(req, res) {
     });
 */
 
-    app.get("/botStatus", (req, res) => {
-        res.render("botStatus", {data: client, maintenanceStatus: maintenanceStatus, member: req.user});
-    });
-
     app.get("/status", (req, res) => {
-        res.render("botStatusPage", {data: client, botData: botData, member: req.user});
+        res.render("status", {data: client, maintenanceStatus: maintenanceStatus, member: req.user,
+        botData: botData, dev: dev, commands: commands});
     });
-
     
 
     /* This GET route is for development usage only.

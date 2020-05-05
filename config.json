@@ -1,17 +1,17 @@
 {"settings": {
       "prefix": "!",
       "modLogChannel": "mod-log",
-      "modRole": "Moderator",
-      "adminRole": "Administrator",
+      "modRole": "mystic",
+      "adminRole": "Mini Boss",
       "welcomeChannel": "arrivals",
       "welcome": "Welcome {member} to {server}! Remember to look over the rules & and introduce yourself in the proper channel. Once you've done so, you'll be allowed access to meet everyone else.",
       "goodbyeChannel": "depatures",
       "goodbye": "Goodbye {member}! We understand you have to continue that journey to bigger and better regions!"
   },
   "port": 3000,
-  "token": "your token here",
-  "clientID": "your client id",
-  "clientsecret": "your secret",
+  "token": "NjM1NjY2MDcxODkzOTY2ODc4.Xa2zbw.7tjLfM2e-IGcZcDhSaWGkMBLg_8",
+  "clientID": "635666071893966878",
+  "clientsecret": "0Hska6M6wYG85Z_xB9ox0EGQZ5jRTmtX",
   "paths": {
       "commands": "./commands",
       "events": "./events"
@@ -22,8 +22,9 @@
       "lvlup": "<:mariolevelup:628002543884042281>"
   },
   "apikeys": {
-      "dog": "your key",
-      "cat": "your key"
+      "dog": "abdb725d-d2fd-4a3b-ab92-004af73e57",
+      "cat": "abdb725d-d2fd-4a3b-ab92-004af73e57",
+      "weather": "f9a2d706913f8009ffcc71566c866b60"
   },
   "colors": {
       "red": "#e3847f",

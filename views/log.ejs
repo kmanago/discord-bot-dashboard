@@ -14,8 +14,16 @@
         <%- include('./templates/nav'); %>
         <div class="container justify-content-center">
 
-                    <h1><b>Bot Log</b></h1>
-                    <hr>
+                <div class=row style="margin-top:10px">
+                        <div class="col-3">
+                            <br>
+                            <div class="page-header">
+                                <h1><b>Bot Log</b></h1>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="background:white">
+                  
                     <div class="logContainer" class="scrollbar" id="style-4">
                         <ul>
                             <% log.forEach((log) => {%>
